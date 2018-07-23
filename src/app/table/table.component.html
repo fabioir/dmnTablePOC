@@ -1,0 +1,24 @@
+<h1>DMN stuff</h1>
+<button (click)="parseLocalXML()">Parse local XML</button>
+
+<br>
+<br>
+
+<ag-grid-angular 
+    #agGrid
+    style="width: 100%; height: 700px;" 
+    class="ag-theme-material"
+    id="gridId"
+    [rowData]="rowData" 
+    [columnDefs]="columnDefs"
+    [enableFilter]="true"
+    rowSelection="multiple"
+    [enableColResize]="true"
+    [rowDragManaged]="true"
+    [animateRows]="true"
+    [suppressDragLeaveHidesColumns]="true"
+    (cellClicked)="onCellClicked($event)"
+    (gridReady)="onGridReady($event)"
+    (cellValueChanged)="onCellEdit($event)"
+    >
+</ag-grid-angular>

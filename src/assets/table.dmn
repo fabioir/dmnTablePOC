@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" id="definitions_077zjyb" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
+  <decision id="decision_1rbp7vm" name="TablaProba">
+    <decisionTable id="decisionTable" hitPolicy="PRIORITY">
+      <input id="input1" label="">
+        <inputExpression id="inputExpression1" typeRef="string">
+          <text>"uno","dos"</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_139dbc8">
+        <inputExpression id="LiteralExpression_0v3paue" typeRef="string">
+          <text>"-","+"</text>
+        </inputExpression>
+      </input>
+      <output id="output1" label="" name="" typeRef="string" />
+      <rule id="DecisionRule_01ydjcc">
+        <description>"Descripcion 1"</description>
+        <inputEntry id="UnaryTests_1nt4bw8">
+          <text>"uno"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_01b91r2">
+          <text>"+"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0144d8t">
+          <text>"+"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0m6vhc8">
+        <description>"Descripcion 2"</description>
+        <inputEntry id="UnaryTests_05zcfav">
+          <text>"uno"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1o5tam4">
+          <text>"-"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1nhgvj7">
+          <text>"-"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0hpebz6">
+        <description>"Descripcion 3"</description>
+        <inputEntry id="UnaryTests_1x1xvai">
+          <text>"dos"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0svglyz">
+          <text>"+"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0hapaun">
+          <text>"-"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1ocvx0k">
+        <description>"Descripcion 4"</description>
+        <inputEntry id="UnaryTests_0gydwca">
+          <text>"dos"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_07ewa1c">
+          <text>"-"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_06a3qu9">
+          <text>"+"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+</definitions>

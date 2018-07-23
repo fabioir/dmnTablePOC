@@ -39,11 +39,14 @@ export class DmnService implements OnInit{
     this.http.get(url, { responseType: 'text' }).subscribe(data => {
       this.dmn.fromXML(data, 'dmn:Definitions', (e,r) => {
         this.currentDMN = r;
-        console.log("Importing from XML to DMN: ");
-        console.log(this.currentDMN);
+        //console.log("Importing from XML to DMN: ");
+        //console.log(this.currentDMN);
 
         //Should delete this line...
         this.saveToXML(this.currentDMN.id);
+
+        //Should delete
+        this.toDecisionTable({});
       });
     
     }, error => {
@@ -59,11 +62,11 @@ export class DmnService implements OnInit{
    */
    saveToXML(file: any){
      const fileXML = this.dmn.toXML(this.currentDMN, (err, res) => {
-       console.log(`Saving from DMN to XML (path: ${file}): `);
-      console.log(res);
+      //console.log(`Saving from DMN to XML (path: ${file}): `);
+      //console.log(res);
     });
 
-     console.log( fileXML );
+     //console.log( fileXML );
    }
 
   /**
@@ -82,7 +85,16 @@ export class DmnService implements OnInit{
     */
    toDecisionTable(dmn: any){
      //Create currentDecisionTable
-     this.currentDMNUpdates.next(this.currentDecisionTable);
+     console.log(`Current DMN:`);
+     console.log(this.currentDMN);
+     //Id, name, namespaces are pending...
+
+     this.currentDecisionTable = new _.DecisionTable();
+
+     this.currentDecisionTable.hitPolicy = this.currentDMN.drgElements[0].decisionTable.hitPolicy; //Hit policy
+     //this.currentDecisionTable.preferredOrientation
+     console.log(this.currentDecisionTable.hitPolicy);
+     //this.currentDMNUpdates.next(this.currentDecisionTable);
    }
    
 }

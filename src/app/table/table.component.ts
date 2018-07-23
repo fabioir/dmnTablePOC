@@ -24,6 +24,7 @@ export class TableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.keepTableUpdated();
+    this.parseLocalXML(); //
   }
 
   ngOnDestroy() {
@@ -90,7 +91,7 @@ export class TableComponent implements OnInit, OnDestroy {
     let columns = [];
     let count = 0;
 
-    if (this.decisionTable !== undefined) {
+    if (this.decisionTable) {
       this.decisionTable.input.forEach(input => {
         columns.push({ headerName: `${input.inputExpression}`, field: ``, editable: true, colId: `input${count + 1}` });//Make sure what to put here. Might need to change the Metamodel
         count++;
@@ -111,7 +112,7 @@ export class TableComponent implements OnInit, OnDestroy {
     let columns = [];
     let count = 0;
 
-    if (this.decisionTable !== undefined) {
+    if (this.decisionTable) {
       this.decisionTable.output.forEach(output => {
         columns.push({ headerName: `${output.name}`, field: ``, editable: true, colId: `output${count + 1}` });
         count++;
@@ -132,13 +133,33 @@ export class TableComponent implements OnInit, OnDestroy {
     let rowData = [];
     let count = 0;
 
-    if (this.decisionTable !== undefined) {
+    if (this.decisionTable) {
       this.decisionTable.rule.forEach(rule => {
-        rowData.push({ number: `${count + 1}`, iv1: `${rule.inputEntry}`, ov1: `${rule.outputEntry}` });
+
+        let newRow = {};
+        let index = 0;
+        newRow[index]['number'] = count + 1;
         count++;
+        index++;
+
+        rule.inputEntry.forEach(inputEnt => {
+          let inputNumber = 1;
+          newRow[index][`iv${inputNumber}`] = inputEnt.text;
+          inputNumber++;
+        });
+        rule.outputEntry.forEach(outputEnt => {
+          let outputNumber = 1;
+          newRow[index][`ov${outputNumber}`] = outputEnt.text;
+          outputNumber++;
+        });
+
+        rowData.push(newRow);
+       
       });
       if(this.decisionTable.rule.length === 0){
         rowData.push({ number: '1', iv1: '-', ov1: '-' });
+        //const keyName = "v99";
+        //rowData[4][keyName] = "fabio";
       }
     } else {
       rowData.push({ id: '1', number: '1', iv1: '-', ov1: '-' });

@@ -29,8 +29,9 @@ export class TableComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.keepTableUpdated();
-    this.parseLocalXML(); //
+    this.dmnService.defaultStart(); //Import default table
+    this.keepTableUpdated(); //Subscribe to table changes
+    //this.parseLocalXML(); //
 
   }
 
@@ -66,15 +67,18 @@ export class TableComponent implements OnInit, OnDestroy {
    */
   keepTableUpdated() {
 
-    this.decisionTable = this.dmnService.currentDecisionTable;
+    this.decisionTable = this.dataService.table;
+    if(this.decisionTable){
+    this.updateFromDecisionTable();
+    }
 
-    this.decisionTableSubscription = this.dmnService.getUpdates().subscribe(decisionTable => {
+    this.decisionTableSubscription = this.dataService.getTableUpdates().subscribe(decisionTable => {
       this.decisionTable = decisionTable;
       this.updateFromDecisionTable();
     });
   }
 
-  parseLocalXML() {
+  example() {
     this.dmnService.importXML('../../assets/table.dmn');
   }
 

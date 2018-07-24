@@ -1,6 +1,6 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable, OnInit, OnDestroy } from '@angular/core';
 
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 
 import DmnModdle from 'dmn-moddle';
 import * as _ from './metamodel-classes/metamodelClasses';
@@ -11,7 +11,7 @@ import { DataService } from './data.service';
 @Injectable({
   providedIn: 'root'
 })
-export class DmnService implements OnInit {
+export class DmnService implements OnInit, OnDestroy {
 
   dmn: DmnModdle = new DmnModdle();
   currentDMN;
@@ -20,12 +20,51 @@ export class DmnService implements OnInit {
   currentDMNUpdates = new Subject();
   currentXML; //updates when it does the DMN
 
+  dmnUpdates: Subscription;
+  xmlUpdates: Subscription;
+  tableUpdates: Subscription;
+
+
   constructor(
     private http: HttpClient,
     private dataService: DataService
   ) { }
 
   ngOnInit() {
+    this.subscribeToChanges();
+  }
+
+  ngOnDestroy() {
+    this.dmnUpdates.unsubscribe();
+    this.xmlUpdates.unsubscribe();
+    this.tableUpdates.unsubscribe();
+  }
+
+  subscribeToChanges() {
+
+    this.dmnUpdates = this.dataService.getDMNUpdates().subscribe(dmn => {
+      if (dmn) {
+        this.currentDMN = dmn;
+      }
+    });
+
+    this.xmlUpdates = this.dataService.getXMLUpdates().subscribe(xml => {
+      if (xml) {
+        this.currentXML = xml;
+      }
+    });
+
+    this.tableUpdates = this.dataService.getTableUpdates().subscribe(table => {
+      if (table) {
+        this.currentDecisionTable = table;
+      }
+    });
+
+  }
+
+  defaultStart() {
+    this.importXML('../../assets/default.dmn');
+    this.toDecisionTable(this.currentDMN);
   }
 
   /**
@@ -45,7 +84,7 @@ export class DmnService implements OnInit {
       this.dataService.setXML(data); //set current XML
       this.dmn.fromXML(data, 'dmn:Definitions', (err, response) => {
         this.currentDMN = response;
-        if(err){
+        if (err) {
           console.log(err);
         }
         this.dataService.setDMN = response; //set current DMN
@@ -63,7 +102,7 @@ export class DmnService implements OnInit {
    * Creates a text file in XML and stores it (still doesn't write) where indicated in file
    */
   saveToXML(file: any) {
-  
+
     this.dmn.toXML(this.currentDMN, (err, res) => {
       this.currentXML = res;
       if (err) {
@@ -91,6 +130,10 @@ export class DmnService implements OnInit {
    * Converts a DMN object in a DecisionTable object that can be presented and edited in the Table Component
    */
   toDecisionTable(dmn: any) {
+    this.currentDMN = this.dataService.dmn;
+    if(!this.currentDMN){
+      return;
+    }
     //Create currentDecisionTable
     //console.log(`Current DMN:`);
     //console.log(this.currentDMN);

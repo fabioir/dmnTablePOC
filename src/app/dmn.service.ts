@@ -14,6 +14,7 @@ export class DmnService implements OnInit{
   dmn: DmnModdle = new DmnModdle();
   currentDMN;
   currentDecisionTable: _.DecisionTable;
+  currentDefinitions: _.Definitions;
   currentDMNUpdates = new Subject();
 
   constructor(
@@ -87,14 +88,34 @@ export class DmnService implements OnInit{
      //Create currentDecisionTable
      console.log(`Current DMN:`);
      console.log(this.currentDMN);
-     //Id, name, namespaces are pending...
+ 
+     //Definitions stores Name, Id, Namespace and drgElements (With the decision table in it)
+     this.currentDefinitions = new _.Definitions();
+     this.currentDefinitions.name = this.currentDMN.name;
+     this.currentDefinitions.id = this.currentDMN.id;
+     this.currentDefinitions.namespace = this.currentDMN.namespace;
+     this.currentDefinitions.drgElements = this.currentDMN.drgElements;
+
+     console.log('Current definitions');
+     console.log(this.currentDefinitions);
 
      this.currentDecisionTable = new _.DecisionTable();
+     this.currentDecisionTable.hitPolicy = this.currentDefinitions.drgElements[0].decisionTable.hitPolicy;
+     this.currentDecisionTable.preferredOrientation = this.currentDefinitions.drgElements[0].decisionTable.preferredOrientation;
+     this.currentDecisionTable.outputLabel = this.currentDefinitions.drgElements[0].decisionTable.outputLabel;
+     this.currentDecisionTable.input = this.currentDefinitions.drgElements[0].decisionTable.input;
+     this.currentDecisionTable.output = this.currentDefinitions.drgElements[0].decisionTable.output;
+     this.currentDecisionTable.rule = this.currentDefinitions.drgElements[0].decisionTable.rule;
+     this.currentDecisionTable.aggregation = this.currentDefinitions.drgElements[0].decisionTable.aggregation;
+     this.currentDecisionTable.id = this.currentDefinitions.drgElements[0].decisionTable.id;
 
-     this.currentDecisionTable.hitPolicy = this.currentDMN.drgElements[0].decisionTable.hitPolicy; //Hit policy
+
+    //this.currentDecisionTable = this.currentDefinitions.drgElements[0].decisionTable;
+     //this.currentDecisionTable.hitPolicy = this.currentDMN.drgElements[0].decisionTable.hitPolicy; //Hit policy
      //this.currentDecisionTable.preferredOrientation
-     console.log(this.currentDecisionTable.hitPolicy);
-     //this.currentDMNUpdates.next(this.currentDecisionTable);
+     console.log(this.currentDecisionTable);
+     //console.log(this.currentDecisionTable.input);
+     this.currentDMNUpdates.next(this.currentDecisionTable);
    }
    
 }

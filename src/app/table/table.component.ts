@@ -62,11 +62,16 @@ export class TableComponent implements OnInit, OnDestroy {
    * Builds a new column definition according to what is in the DecisionTable Object
    */
   updateColumnDefs() {
-
+//Update Information Item Name
+let HP = 'F';
+if(this.dmnService.currentDefinitions){
+  HP=this.dmnService.currentDefinitions.drgElements[0].decisionTable.hitPolicy.replace(" ","");
+  HP = _.ReverseHitPolicy[HP];
+}
     let firstCol = {
       headerName: '', field: '', id: 'overHit', suppressMovable: true, width: 120, suppressResize: true, pinned: 'left',
       children: [
-        { headerName: 'H', field: 'number', width: 120, rowDrag: true, suppressResize: true, colId: 'hitPolicy', lockPosition: true }
+        { headerName: HP, field: 'number', width: 120, rowDrag: true, suppressResize: true, colId: 'hitPolicy', lockPosition: true }
       ]
     };
 
@@ -76,9 +81,14 @@ export class TableComponent implements OnInit, OnDestroy {
     //Push Output Columns
     let outputColumns = this.buildOutputColumns();
 
+    //Update Information Item Name
+    let ITN = 'Information Item Name';
+    if(this.dmnService.currentDefinitions){
+      ITN=this.dmnService.currentDefinitions.drgElements[0].name;
+    }
     let columnDefs = [
       {
-        headerName: 'Information Item Name', field: 'infItemName', pinned: 'left', colId: 'decisionName',
+        headerName: ITN, field: 'infItemName', pinned: 'left', colId: 'decisionName',
         children: [firstCol, inputColumns, outputColumns]
       }];
 
@@ -89,42 +99,44 @@ export class TableComponent implements OnInit, OnDestroy {
 
   buildInputColumns(): any {
     let columns = [];
-    let count = 0;
+    let count = 1;
 
     if (this.decisionTable) {
       this.decisionTable.input.forEach(input => {
-        columns.push({ headerName: `${input.inputExpression}`, field: ``, editable: true, colId: `input${count + 1}` });//Make sure what to put here. Might need to change the Metamodel
+        console.log(input)
+        columns.push({ headerName: `${input.inputExpression.typeRef}`, field: `iv${count}`, editable: true, colId: `input${count + 1}` });//Make sure what to put here. Might need to change the Metamodel
         count++;
       });
       if (this.decisionTable.input.length === 0) {
-        columns.push({ headerName: 'Input Expression 1', field: 'iv1', editable: true, colId: 'input1' });
+        columns.push({ headerName: 'Input Expression 1', field: `iv${count}`, editable: true, colId: 'input1' });
       }
     } else {
-      columns.push({ headerName: 'Input Expression 1', field: 'iv1', editable: true, colId: 'input1' });
+      columns.push({ headerName: 'Input Expression 1', field: `iv${count}`, editable: true, colId: 'input1' });
     }
     return {
-      headerName: '', field: '', colId: 'inputs', suppressMovable: true, lockPosition: true, marryChildren: true,
+      headerName: 'Input', field: '', colId: 'inputs', suppressMovable: true, lockPosition: true, marryChildren: true,
       children: columns
     };
   }
 
   buildOutputColumns(): any {
     let columns = [];
-    let count = 0;
+    let count = 1;
 
     if (this.decisionTable) {
       this.decisionTable.output.forEach(output => {
-        columns.push({ headerName: `${output.name}`, field: ``, editable: true, colId: `output${count + 1}` });
+        console.log(output)
+        columns.push({ headerName: `${output.typeRef}`, field: `ov${count}`, editable: true, colId: `output${count + 1}` });
         count++;
       });
       if (this.decisionTable.output.length === 0) {
-        columns.push({ headerName: 'Output Expression 1', field: 'ov1', editable: true, colId: 'output1' });
+        columns.push({ headerName: 'Output Expression 1', field: `ov${count}`, editable: true, colId: 'output1' });
       }
     } else {
-      columns.push({ headerName: 'Output Expression 1', field: 'ov1', editable: true, colId: 'output1' });
+      columns.push({ headerName: 'Output Expression 1', field: `ov${count}`, editable: true, colId: 'output1' });
     }
     return {
-      headerName: '', field: '', colId: 'outputs', suppressMovable: true, lockPosition: true, marryChildren: true,
+      headerName: 'Output', field: '', colId: 'outputs', suppressMovable: true, lockPosition: true, marryChildren: true,
       children: columns
     };
   }
@@ -137,22 +149,22 @@ export class TableComponent implements OnInit, OnDestroy {
       this.decisionTable.rule.forEach(rule => {
 
         let newRow = {};
-        let index = 0;
-        newRow[index]['number'] = count + 1;
+        //let index = 0;
+        newRow['number'] = count + 1;
+        newRow['id'] = count + 1;
         count++;
-        index++;
-
+        //index++;
+        let inputNumber = 1;
         rule.inputEntry.forEach(inputEnt => {
-          let inputNumber = 1;
-          newRow[index][`iv${inputNumber}`] = inputEnt.text;
+          newRow[`iv${inputNumber}`] = inputEnt.text.replace(/["']/g,"");
           inputNumber++;
         });
+        let outputNumber = 1;
         rule.outputEntry.forEach(outputEnt => {
-          let outputNumber = 1;
-          newRow[index][`ov${outputNumber}`] = outputEnt.text;
+          newRow[`ov${outputNumber}`] = outputEnt.text.replace(/["']/g,"");
           outputNumber++;
         });
-
+        //console.log(newRow)
         rowData.push(newRow);
        
       });
@@ -164,9 +176,9 @@ export class TableComponent implements OnInit, OnDestroy {
     } else {
       rowData.push({ id: '1', number: '1', iv1: '-', ov1: '-' });
     }
-
+    //rowData = [{ id: '1', number: '1', iv1: '-', ov1: '-' }];
     this.agGrid.api.setRowData(rowData);
-    console.log(`Node: ${this.agGrid.gridOptions}`);
+    //console.log(`Node: ${this.agGrid.gridOptions}`);
   }
 
 }

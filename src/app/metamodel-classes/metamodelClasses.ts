@@ -22,6 +22,8 @@ export class DecisionTable {
     preferredOrientation: PreferredOrientation = PreferredOrientation.ruleAsRow;    //DecisionTableOrientation[0..1]
     outputLabel: string;                //[0..1] description of the table output
 
+    //Extra
+    id: string;
 }
 
 export class InputClause {
@@ -89,6 +91,16 @@ export enum HitPolicy {
     C = "COLLECT",
     R = "RULE ORDER",
     O = "OUTPUT ORDER"
+}
+
+export enum ReverseHitPolicy {
+    UNIQUE = "U",
+    FIRST = "F",
+    PRIORITY = "P",
+    ANY = "A",
+    COLLECT = "C",
+    RULEORDER = "R",
+    OUTPUTORDER = "O"
 }
 
 export enum BuiltinAggregator { 

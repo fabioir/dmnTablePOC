@@ -1,6 +1,7 @@
 <h1>DMN stuff</h1>
 <button (click)="parseLocalXML()">Parse local XML</button>
-<a href="/assets/table.dmn">Descarga tabla</a>
+<br>
+<a href="/assets/table.dmn">Download the XML</a>
 <br>
 <br>
 
@@ -22,3 +23,8 @@
     (cellValueChanged)="onCellEdit($event)"
     >
 </ag-grid-angular>
+
+<div>
+    <input type="file" (change)="onFileChanged($event)"/>
+</div>
+<button (click)="logFile()">Log file</button>

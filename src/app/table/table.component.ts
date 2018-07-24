@@ -18,13 +18,40 @@ export class TableComponent implements OnInit, OnDestroy {
   decisionTable: _.DecisionTable; //Attached to a Observable from the DMN service
   decisionTableSubscription: Subscription;
 
+
+
   constructor(
-    private dmnService: DmnService
+    private dmnService: DmnService,
+    private http: HttpClient
   ) { }
 
   ngOnInit() {
     this.keepTableUpdated();
     this.parseLocalXML(); //
+
+  }
+
+  logFile() {
+    //console.log(this.file);
+  }
+
+  onFileChanged(event) {
+    let reader = new FileReader();
+
+    if (event.target.files && event.target.files.length) {
+      const [file] = event.target.files;
+      reader.readAsDataURL(file);
+
+      reader.onload = () => {
+        //this.formGroup.patchValue({
+        //file: reader.result
+        //});
+        this.dmnService.importLocalXML(reader.result);
+        /*this.http.get(reader.result, { responseType: 'text' }).subscribe(data => {
+          console.log(data);
+        });*/
+      };
+    }
   }
 
   ngOnDestroy() {
@@ -62,12 +89,12 @@ export class TableComponent implements OnInit, OnDestroy {
    * Builds a new column definition according to what is in the DecisionTable Object
    */
   updateColumnDefs() {
-//Update Information Item Name
-let HP = 'F';
-if(this.dmnService.currentDefinitions){
-  HP=this.dmnService.currentDefinitions.drgElements[0].decisionTable.hitPolicy.replace(" ","");
-  HP = _.ReverseHitPolicy[HP];
-}
+    //Update Information Item Name
+    let HP = 'F';
+    if (this.dmnService.currentDefinitions) {
+      HP = this.dmnService.currentDefinitions.drgElements[0].decisionTable.hitPolicy.replace(" ", "");
+      HP = _.ReverseHitPolicy[HP];
+    }
     let firstCol = {
       headerName: '', field: '', id: 'overHit', suppressMovable: true, width: 120, suppressResize: true, pinned: 'left',
       children: [
@@ -83,8 +110,8 @@ if(this.dmnService.currentDefinitions){
 
     //Update Information Item Name
     let ITN = 'Information Item Name';
-    if(this.dmnService.currentDefinitions){
-      ITN=this.dmnService.currentDefinitions.drgElements[0].name;
+    if (this.dmnService.currentDefinitions) {
+      ITN = this.dmnService.currentDefinitions.drgElements[0].name;
     }
     let columnDefs = [
       {
@@ -156,19 +183,19 @@ if(this.dmnService.currentDefinitions){
         //index++;
         let inputNumber = 1;
         rule.inputEntry.forEach(inputEnt => {
-          newRow[`iv${inputNumber}`] = inputEnt.text.replace(/["']/g,"");
+          newRow[`iv${inputNumber}`] = inputEnt.text.replace(/["']/g, "");
           inputNumber++;
         });
         let outputNumber = 1;
         rule.outputEntry.forEach(outputEnt => {
-          newRow[`ov${outputNumber}`] = outputEnt.text.replace(/["']/g,"");
+          newRow[`ov${outputNumber}`] = outputEnt.text.replace(/["']/g, "");
           outputNumber++;
         });
         //console.log(newRow)
         rowData.push(newRow);
-       
+
       });
-      if(this.decisionTable.rule.length === 0){
+      if (this.decisionTable.rule.length === 0) {
         rowData.push({ number: '1', iv1: '-', ov1: '-' });
         //const keyName = "v99";
         //rowData[4][keyName] = "fabio";
@@ -180,6 +207,7 @@ if(this.dmnService.currentDefinitions){
     this.agGrid.api.setRowData(rowData);
     //console.log(`Node: ${this.agGrid.gridOptions}`);
   }
+
 
 }
 /*columnDefs = [

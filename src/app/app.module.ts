@@ -7,7 +7,8 @@ import { TableComponent } from './table/table.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 
-import { AgGridModule } from 'ag-grid-angular';;
+import { AgGridModule } from 'ag-grid-angular';
+
 
 @NgModule({
   declarations: [
@@ -18,7 +19,7 @@ import { AgGridModule } from 'ag-grid-angular';;
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    AgGridModule.withComponents([]), //The withComponents call is necessary for the grid to be able to use Angular components as cells / headers
+    AgGridModule.withComponents([]) //The withComponents call is necessary for the grid to be able to use Angular components as cells / headers
   ],
   providers: [],
   bootstrap: [AppComponent]

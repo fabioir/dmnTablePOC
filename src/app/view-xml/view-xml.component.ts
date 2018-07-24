@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DmnService } from '../dmn.service';
+import { DataService } from '../data.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -13,27 +14,32 @@ export class ViewXmlComponent implements OnInit, OnDestroy {
   keepUpdated: Subscription;
 
   constructor(
-    private dmnService: DmnService
+    private dmnService: DmnService,
+    private dataService: DataService
   ) { }
 
   ngOnInit() {
     console.log(new Date())
-   this.keepXMLUpdated();
-    this.xmlGenerated = this.dmnService.currentXML; 
-    this.dmnService.saveToXML('');
+    this.keepXMLUpdated();
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.keepUpdated.unsubscribe();
   }
 
-  keepXMLUpdated(){
-  
-    this.xmlGenerated = this.dmnService.currentXML;
+  keepXMLUpdated() {
 
-    this.keepUpdated = this.dmnService.getUpdates().subscribe(decisionTable => {
+    if (this.dataService.xml) {
+      this.xmlGenerated = this.dataService.xml;
+    }
+
+    this.keepUpdated = this.dataService.getXMLUpdates().subscribe(xml => {
       console.log("Here we are");
-      this.xmlGenerated = this.dmnService.currentXML;
+      this.xmlGenerated = xml;
     });
+  }
+
+  showIt(){
+    console.log(this.dataService.table)
   }
 }

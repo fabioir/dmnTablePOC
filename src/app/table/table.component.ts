@@ -133,26 +133,28 @@ export class TableComponent implements OnInit, OnDestroy {
     //Building Output Columns
     let outputColumns = this.buildOutputColumns();
 
-
+    //Assembling all the columns together
     let columnDefs = [
       {
         headerName: ITN, field: 'infItemName', pinned: 'left', colId: 'decisionName',
         children: [firstCol, inputColumns, outputColumns]
       }];
 
+    //Setting columns to the grid (When in edition step we'll have to check synchro among displayed and stored table)
     this.agGrid.api.setColumnDefs(columnDefs);
-
-    //console.log(columnDefs);
   }
 
+  /**
+   * Builds the input columns from the decision table updated respect to the one stored in the data service
+   */
   buildInputColumns(): any {
     let columns = [];
     let count = 1;
-
     if (this.decisionTable) {
       this.decisionTable.input.forEach(input => {
-        //console.log(input)
-        columns.push({ headerName: `${input.inputExpression.text} (${input.inputExpression.typeRef})`, field: `iv${count}`, editable: true, colId: `input${count + 1}` });//Make sure what to put here. Might need to change the Metamodel
+        columns.push({ headerName: `${input.inputExpression.text} (${input.inputExpression.typeRef})`, field: `iv${count}`, editable: true, colId: `input${count + 1}` });
+        //Make sure you know what to put here. Might need to change the Metamodel
+        //Let's take care of specification conformance
         count++;
       });
       if (this.decisionTable.input.length === 0) {
@@ -167,6 +169,9 @@ export class TableComponent implements OnInit, OnDestroy {
     };
   }
 
+  /**
+   * Builds the output columns from the decision table updated respect to the one stored in the data service
+   */
   buildOutputColumns(): any {
     let columns = [];
     let count = 1;
@@ -189,7 +194,10 @@ export class TableComponent implements OnInit, OnDestroy {
     };
   }
 
-  updateCells() { //Make it dynamic according to the columns. Go throug nested loops, for each rule a row, for each entry a cell edition and tab to the next.
+  /**
+   * Gets the data stored in the decision table (updated respect to the one stored in the data service) and fills the rows
+   */
+  updateCells() {
     let rowData = [];
     let count = 0;
 
@@ -197,47 +205,77 @@ export class TableComponent implements OnInit, OnDestroy {
       this.decisionTable.rule.forEach(rule => {
 
         let newRow = {};
-        //let index = 0;
         newRow['number'] = count + 1;
         newRow['id'] = count + 1;
         count++;
-        //index++;
+
+        //Filling each input column
         let inputNumber = 1;
+
         rule.inputEntry.forEach(inputEnt => {
           newRow[`iv${inputNumber}`] = inputEnt.text.replace(/["']/g, "");
           inputNumber++;
         });
+
+        //Filling each output column
         let outputNumber = 1;
+
         rule.outputEntry.forEach(outputEnt => {
           newRow[`ov${outputNumber}`] = outputEnt.text.replace(/["']/g, "");
           outputNumber++;
         });
-        //console.log(newRow)
+
         rowData.push(newRow);
       });
-
-      if (this.decisionTable.rule.length === 0) {
-        rowData.push({ number: '1', iv1: '-', ov1: '-' });
-        //const keyName = "v99";
-        //rowData[4][keyName] = "fabio";
-      }
-    } else {
-      //rowData.push({ id: '1', number: '1', iv1: '-', ov1: '-' });
     }
-    //rowData = [{ id: '1', number: '1', iv1: '-', ov1: '-' }];
+
+    //Setting rows to the grid (When in edition step we'll have to check synchro among displayed and stored table)
     this.agGrid.api.setRowData(rowData);
-    //console.log(`Node: ${this.agGrid.gridOptions}`);
   }
 
   /**
    * Asks the smn Service to load an example stored in the assets folderS
    */
-  example(){
+  example() {
     this.dmnService.importXML('/assets/table.dmn');
   }
 
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*columnDefs = [
     {
       headerName: 'Information Item Name', field: 'infItemName', pinned: 'left', colId: 'decisionName',

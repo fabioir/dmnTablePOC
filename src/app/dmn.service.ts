@@ -45,6 +45,7 @@ export class DmnService implements OnInit, OnDestroy {
     this.dmnUpdates = this.dataService.getDMNUpdates().subscribe(dmn => {
       if (dmn) {
         this.currentDMN = dmn;
+        this.toDecisionTable(dmn);
       }
     });
 
@@ -63,7 +64,10 @@ export class DmnService implements OnInit, OnDestroy {
   }
 
   defaultStart() {
+    this.subscribeToChanges();
+    console.log("Default start");
     this.importXML('../../assets/default.dmn');
+    console.log(this.dataService.xml);
     this.toDecisionTable(this.currentDMN);
   }
 
@@ -87,7 +91,8 @@ export class DmnService implements OnInit, OnDestroy {
         if (err) {
           console.log(err);
         }
-        this.dataService.setDMN = response; //set current DMN
+        console.log(response == true);
+        this.dataService.setDMN(response); //set current DMN
       });
 
     }, error => {
@@ -131,9 +136,12 @@ export class DmnService implements OnInit, OnDestroy {
    */
   toDecisionTable(dmn: any) {
     this.currentDMN = this.dataService.dmn;
+    
     if(!this.currentDMN){
+      console.log("Current dmn is empty");
       return;
     }
+    
     //Create currentDecisionTable
     //console.log(`Current DMN:`);
     //console.log(this.currentDMN);

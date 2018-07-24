@@ -27,6 +27,7 @@ export class DataService {
   }
 
   setDMN(dmn: Definitions) {
+    console.log("setting dmn in data service");
     if (dmn) {
       this.dmn = dmn;
       this.dmnUpdate.next(this.dmn);

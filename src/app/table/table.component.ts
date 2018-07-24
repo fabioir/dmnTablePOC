@@ -16,10 +16,10 @@ import * as _ from '../metamodel-classes/metamodelClasses';
 })
 export class TableComponent implements OnInit, OnDestroy {
 
+  //Variables
   @ViewChild('agGrid') agGrid: AgGridNg2;
-  decisionTable: _.DecisionTable; //Attached to a Observable from the DMN service
+  decisionTable: _.DecisionTable; //Attached to a Observable from the data service
   decisionTableSubscription: Subscription;
-
 
 
   constructor(
@@ -31,14 +31,20 @@ export class TableComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.dmnService.defaultStart(); //Import default table
     this.keepTableUpdated(); //Subscribe to table changes
-    //this.parseLocalXML(); //
-
+  }
+  ngOnDestroy() {
+    this.decisionTableSubscription.unsubscribe();
+  }
+  onGridReady(params) {
+    console.log("The grid is ready");
+    //this.updateFromDecisionTable();
   }
 
-  logFile() {
-    //console.log(this.file);
-  }
-
+  /**
+   * 
+   * @param event file uploaded triggers a change event
+   * This function reacts to a local XML file upload and asks the dmn service to parse it
+   */
   onFileChanged(event) {
     let reader = new FileReader();
 
@@ -58,58 +64,62 @@ export class TableComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
-    this.decisionTableSubscription.unsubscribe();
-  }
+
 
   /**
-   * Subscribes to current Decision Table in the dmn service
+   * Subscribes to current Decision Table in the data service
    */
   keepTableUpdated() {
 
     this.decisionTable = this.dataService.table;
-    if(this.decisionTable){
-    this.updateFromDecisionTable();
+    if (this.decisionTable) {
+      this.updateFromDecisionTable();
     }
-
     this.decisionTableSubscription = this.dataService.getTableUpdates().subscribe(decisionTable => {
       this.decisionTable = decisionTable;
       this.updateFromDecisionTable();
     });
   }
 
-  example() {
-    this.dmnService.importXML('../../assets/table.dmn');
-  }
-
-  parseToTable(){
+  //Necessary?
+  parseToTable() {
     this.dmnService.toDecisionTable({});
   }
 
-  onGridReady(params) {
-    console.log("OnGrid ready function has been triggered");
-    //this.updateFromDecisionTable();
+
+  saveToXML() {
+    this.dmnService.saveToXML('');
   }
 
+  /**
+   * Invoques the functions that build the Columns and cells of the table
+   */
   updateFromDecisionTable() {
     this.updateColumnDefs();
     this.updateCells();
   }
 
-  saveToXML(){
-    this.dmnService.saveToXML('');
-  }
 
   /**
    * Builds a new column definition according to what is in the DecisionTable Object
    */
   updateColumnDefs() {
-    //Update Information Item Name
-    let HP = 'F';
-    if (this.dmnService.currentDefinitions) {
-      HP = this.dmnService.currentDefinitions.drgElements[0].decisionTable.hitPolicy.replace(" ", "");
+    //Update Hit policy
+    let HP = 'F'; //Default hit policy
+    if (this.dataService.dmn) {
+      HP = this.dataService.dmn.drgElements[0].decisionTable.hitPolicy.replace(" ", "");
       HP = _.ReverseHitPolicy[HP];
     }
+
+    //Update Information Item Name
+    let ITN = 'Information Item Name';
+    if (this.dataService.dmn) {
+      if (this.dataService.dmn.drgElements[0].name !== '') {
+        ITN = this.dataService.dmn.drgElements[0].name;
+      }
+    }
+
+    //Building the first column
     let firstCol = {
       headerName: '', field: '', id: 'overHit', suppressMovable: true, width: 120, suppressResize: true, pinned: 'left',
       children: [
@@ -117,17 +127,13 @@ export class TableComponent implements OnInit, OnDestroy {
       ]
     };
 
-    //Push Input Columns
+    //Building Input Columns
     let inputColumns = this.buildInputColumns();
 
-    //Push Output Columns
+    //Building Output Columns
     let outputColumns = this.buildOutputColumns();
 
-    //Update Information Item Name
-    let ITN = 'Information Item Name';
-    if (this.dmnService.currentDefinitions) {
-      ITN = this.dmnService.currentDefinitions.drgElements[0].name;
-    }
+
     let columnDefs = [
       {
         headerName: ITN, field: 'infItemName', pinned: 'left', colId: 'decisionName',
@@ -187,7 +193,7 @@ export class TableComponent implements OnInit, OnDestroy {
     let rowData = [];
     let count = 0;
 
-    if (this.decisionTable) {
+    if (this.decisionTable.rule) {
       this.decisionTable.rule.forEach(rule => {
 
         let newRow = {};
@@ -216,11 +222,18 @@ export class TableComponent implements OnInit, OnDestroy {
         //rowData[4][keyName] = "fabio";
       }
     } else {
-      rowData.push({ id: '1', number: '1', iv1: '-', ov1: '-' });
+      //rowData.push({ id: '1', number: '1', iv1: '-', ov1: '-' });
     }
     //rowData = [{ id: '1', number: '1', iv1: '-', ov1: '-' }];
     this.agGrid.api.setRowData(rowData);
     //console.log(`Node: ${this.agGrid.gridOptions}`);
+  }
+
+  /**
+   * Asks the smn Service to load an example stored in the assets folderS
+   */
+  example(){
+    this.dmnService.importXML('/assets/table.dmn');
   }
 
 

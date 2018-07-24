@@ -48,6 +48,7 @@ export class DmnService implements OnInit{
 
         //Should delete
         this.toDecisionTable({});
+        this.toDMN(this.currentDecisionTable);
       });
     
     }, error => {
@@ -64,10 +65,10 @@ export class DmnService implements OnInit{
    saveToXML(file: any){
      const fileXML = this.dmn.toXML(this.currentDMN, (err, res) => {
       //console.log(`Saving from DMN to XML (path: ${file}): `);
-      //console.log(res);
+      console.log(res);
     });
 
-     //console.log( fileXML );
+     console.log( fileXML );
    }
 
   /**
@@ -76,7 +77,14 @@ export class DmnService implements OnInit{
    * This function uses the object DecisionTable to instantiate a DMN with the same info.
    */
    toDMN(table: _.DecisionTable){
+    
+    console.log(this.currentDMN)
 
+    this.currentDMN.drgElements[0].decisionTable = table;
+
+    console.log(this.currentDMN);
+
+    this.saveToXML("");
    }
 
    /**
@@ -86,8 +94,8 @@ export class DmnService implements OnInit{
     */
    toDecisionTable(dmn: any){
      //Create currentDecisionTable
-     console.log(`Current DMN:`);
-     console.log(this.currentDMN);
+     //console.log(`Current DMN:`);
+     //console.log(this.currentDMN);
  
      //Definitions stores Name, Id, Namespace and drgElements (With the decision table in it)
      this.currentDefinitions = new _.Definitions();
@@ -96,8 +104,8 @@ export class DmnService implements OnInit{
      this.currentDefinitions.namespace = this.currentDMN.namespace;
      this.currentDefinitions.drgElements = this.currentDMN.drgElements;
 
-     console.log('Current definitions');
-     console.log(this.currentDefinitions);
+     //console.log('Current definitions');
+     //console.log(this.currentDefinitions);
 
      this.currentDecisionTable = new _.DecisionTable();
      this.currentDecisionTable.hitPolicy = this.currentDefinitions.drgElements[0].decisionTable.hitPolicy;
@@ -113,7 +121,7 @@ export class DmnService implements OnInit{
     //this.currentDecisionTable = this.currentDefinitions.drgElements[0].decisionTable;
      //this.currentDecisionTable.hitPolicy = this.currentDMN.drgElements[0].decisionTable.hitPolicy; //Hit policy
      //this.currentDecisionTable.preferredOrientation
-     console.log(this.currentDecisionTable);
+     //console.log(this.currentDecisionTable);
      //console.log(this.currentDecisionTable.input);
      this.currentDMNUpdates.next(this.currentDecisionTable);
    }

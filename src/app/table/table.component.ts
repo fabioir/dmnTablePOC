@@ -49,7 +49,7 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   onGridReady(params) {
-    console.log("OnGrid ready function has been triggered");
+    //console.log("OnGrid ready function has been triggered");
     this.updateFromDecisionTable();
   }
 
@@ -94,7 +94,7 @@ if(this.dmnService.currentDefinitions){
 
     this.agGrid.api.setColumnDefs(columnDefs);
 
-    console.log(columnDefs);
+    //console.log(columnDefs);
   }
 
   buildInputColumns(): any {
@@ -103,7 +103,7 @@ if(this.dmnService.currentDefinitions){
 
     if (this.decisionTable) {
       this.decisionTable.input.forEach(input => {
-        console.log(input)
+        //console.log(input)
         columns.push({ headerName: `${input.inputExpression.typeRef}`, field: `iv${count}`, editable: true, colId: `input${count + 1}` });//Make sure what to put here. Might need to change the Metamodel
         count++;
       });
@@ -125,7 +125,7 @@ if(this.dmnService.currentDefinitions){
 
     if (this.decisionTable) {
       this.decisionTable.output.forEach(output => {
-        console.log(output)
+        //console.log(output)
         columns.push({ headerName: `${output.typeRef}`, field: `ov${count}`, editable: true, colId: `output${count + 1}` });
         count++;
       });

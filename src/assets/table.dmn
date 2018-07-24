@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" id="definitions_077zjyb" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
-  <decision id="decision_1rbp7vm" name="TablaProba">
-    <decisionTable id="decisionTable" hitPolicy="PRIORITY">
+  <decision id="decision_1rbp7vm" name="TablaProba2">
+    <decisionTable id="decisionTable" hitPolicy="RULE ORDER">
       <input id="input1" label="">
         <inputExpression id="inputExpression1" typeRef="string">
           <text>"uno","dos"</text>
@@ -12,7 +12,13 @@
           <text>"-","+"</text>
         </inputExpression>
       </input>
-      <output id="output1" label="" name="" typeRef="string" />
+      <input id="InputClause_128x91g">
+        <inputExpression id="LiteralExpression_1i1hls8" typeRef="boolean">
+          <text>McMagdalenas</text>
+        </inputExpression>
+      </input>
+      <output id="output1" typeRef="string" />
+      <output id="OutputClause_0yn0qy2" typeRef="integer" />
       <rule id="DecisionRule_01ydjcc">
         <description>"Descripcion 1"</description>
         <inputEntry id="UnaryTests_1nt4bw8">
@@ -21,8 +27,14 @@
         <inputEntry id="UnaryTests_01b91r2">
           <text>"+"</text>
         </inputEntry>
+        <inputEntry id="UnaryTests_199vv02">
+          <text>true</text>
+        </inputEntry>
         <outputEntry id="LiteralExpression_0144d8t">
           <text>"+"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_194kqj6">
+          <text>2</text>
         </outputEntry>
       </rule>
       <rule id="DecisionRule_0m6vhc8">
@@ -33,8 +45,14 @@
         <inputEntry id="UnaryTests_1o5tam4">
           <text>"-"</text>
         </inputEntry>
+        <inputEntry id="UnaryTests_186nlyu">
+          <text>false</text>
+        </inputEntry>
         <outputEntry id="LiteralExpression_1nhgvj7">
           <text>"-"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1cnwnwb">
+          <text>1</text>
         </outputEntry>
       </rule>
       <rule id="DecisionRule_0hpebz6">
@@ -45,8 +63,14 @@
         <inputEntry id="UnaryTests_0svglyz">
           <text>"+"</text>
         </inputEntry>
+        <inputEntry id="UnaryTests_10y9mse">
+          <text>false</text>
+        </inputEntry>
         <outputEntry id="LiteralExpression_0hapaun">
           <text>"-"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0plv0da">
+          <text>1</text>
         </outputEntry>
       </rule>
       <rule id="DecisionRule_1ocvx0k">
@@ -57,8 +81,14 @@
         <inputEntry id="UnaryTests_07ewa1c">
           <text>"-"</text>
         </inputEntry>
+        <inputEntry id="UnaryTests_0mstjtt">
+          <text>true</text>
+        </inputEntry>
         <outputEntry id="LiteralExpression_06a3qu9">
           <text>"+"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1gd7esp">
+          <text>2</text>
         </outputEntry>
       </rule>
     </decisionTable>

@@ -5,6 +5,8 @@ import { AgGridNg2 } from 'ag-grid-angular';
 import { DmnService } from '../dmn.service';
 import { Subscription } from 'rxjs';
 
+import { DataService } from '../data.service';
+
 import * as _ from '../metamodel-classes/metamodelClasses';
 
 @Component({
@@ -22,7 +24,8 @@ export class TableComponent implements OnInit, OnDestroy {
 
   constructor(
     private dmnService: DmnService,
-    private http: HttpClient
+    private http: HttpClient,
+    private dataService: DataService
   ) { }
 
   ngOnInit() {
@@ -46,7 +49,7 @@ export class TableComponent implements OnInit, OnDestroy {
         //this.formGroup.patchValue({
         //file: reader.result
         //});
-        this.dmnService.importLocalXML(reader.result);
+        this.dmnService.importXML(reader.result);
         /*this.http.get(reader.result, { responseType: 'text' }).subscribe(data => {
           console.log(data);
         });*/
@@ -72,7 +75,7 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   parseLocalXML() {
-    this.dmnService.importLocalXML('../../assets/table.dmn');
+    this.dmnService.importXML('../../assets/table.dmn');
   }
 
   parseToTable(){

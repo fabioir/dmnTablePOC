@@ -6,6 +6,8 @@ import DmnModdle from 'dmn-moddle';
 import * as _ from './metamodel-classes/metamodelClasses';
 import { HttpClient } from '@angular/common/http'
 
+import { DataService } from './data.service';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -20,6 +22,7 @@ export class DmnService implements OnInit {
 
   constructor(
     private http: HttpClient,
+    private dataService: DataService
   ) { }
 
   ngOnInit() {
@@ -35,25 +38,21 @@ export class DmnService implements OnInit {
   /**
    * 
    * @param url Local URL (assets) where the XML is
-   * This function fetches and parses to DMN a XML file stored in a local route (assets recomended). Let's find out how to import a local file from the system no matter the origin...
+   * This function fetches and parses to DMN a XML file
    */
-  importLocalXML(url: string) {
+  importXML(url: string) {
     this.http.get(url, { responseType: 'text' }).subscribe(data => {
-      this.dmn.fromXML(data, 'dmn:Definitions', (e, r) => {
-        this.currentDMN = r;
-        //console.log("Importing from XML to DMN: ");
-        //console.log(this.currentDMN);
-
-        //Should delete this line...
-        // this.saveToXML(this.currentDMN.id);
-
-        //Should delete
-        //this.toDecisionTable({});
-        //this.toDMN(this.currentDecisionTable);
+      this.dataService.setXML(data); //set current XML
+      this.dmn.fromXML(data, 'dmn:Definitions', (err, response) => {
+        this.currentDMN = response;
+        if(err){
+          console.log(err);
+        }
+        this.dataService.setDMN = response; //set current DMN
       });
 
     }, error => {
-      console.log("Something went wrong getting local dmn file.");
+      console.log("Something went wrong getting dmn file.");
       console.log(error);
     });
   }
@@ -64,23 +63,14 @@ export class DmnService implements OnInit {
    * Creates a text file in XML and stores it (still doesn't write) where indicated in file
    */
   saveToXML(file: any) {
-
-    /*//First we prepare the current DMN
-    this.toDecisionTable({});
-    this.toDMN(this.currentDecisionTable);*/
-
+  
     this.dmn.toXML(this.currentDMN, (err, res) => {
-      console.log(`Saving from DMN to XML (path: ${file}): `);
-      console.log(res);
-
+      this.currentXML = res;
       if (err) {
         console.log(err);
       }
-
-      this.currentXML = res;
-      this.currentDMNUpdates.next(this.currentDecisionTable);
+      this.dataService.setXML(res);
     });
-    console.log(this.currentXML)
   }
 
   /**
@@ -90,13 +80,9 @@ export class DmnService implements OnInit {
    */
   toDMN(table: _.DecisionTable) {
 
-    console.log(this.currentDMN)
-
     this.currentDMN.drgElements[0].decisionTable = table;
-
-    console.log(this.currentDMN);
-
-    //this.saveToXML("");
+    this.dataService.setDMN(this.currentDMN);
+    //console.log(this.currentDMN);
   }
 
   /**
@@ -136,6 +122,7 @@ export class DmnService implements OnInit {
     //console.log(this.currentDecisionTable);
     //console.log(this.currentDecisionTable.input);
     this.currentDMNUpdates.next(this.currentDecisionTable);
+    this.dataService.setTable(this.currentDecisionTable);
   }
 
 }

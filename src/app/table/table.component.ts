@@ -75,14 +75,22 @@ export class TableComponent implements OnInit, OnDestroy {
     this.dmnService.importLocalXML('../../assets/table.dmn');
   }
 
+  parseToTable(){
+    this.dmnService.toDecisionTable({});
+  }
+
   onGridReady(params) {
-    //console.log("OnGrid ready function has been triggered");
-    this.updateFromDecisionTable();
+    console.log("OnGrid ready function has been triggered");
+    //this.updateFromDecisionTable();
   }
 
   updateFromDecisionTable() {
     this.updateColumnDefs();
     this.updateCells();
+  }
+
+  saveToXML(){
+    this.dmnService.saveToXML('');
   }
 
   /**
@@ -131,7 +139,7 @@ export class TableComponent implements OnInit, OnDestroy {
     if (this.decisionTable) {
       this.decisionTable.input.forEach(input => {
         //console.log(input)
-        columns.push({ headerName: `${input.inputExpression.typeRef}`, field: `iv${count}`, editable: true, colId: `input${count + 1}` });//Make sure what to put here. Might need to change the Metamodel
+        columns.push({ headerName: `${input.inputExpression.text} (${input.inputExpression.typeRef})`, field: `iv${count}`, editable: true, colId: `input${count + 1}` });//Make sure what to put here. Might need to change the Metamodel
         count++;
       });
       if (this.decisionTable.input.length === 0) {
@@ -193,8 +201,8 @@ export class TableComponent implements OnInit, OnDestroy {
         });
         //console.log(newRow)
         rowData.push(newRow);
-
       });
+
       if (this.decisionTable.rule.length === 0) {
         rowData.push({ number: '1', iv1: '-', ov1: '-' });
         //const keyName = "v99";

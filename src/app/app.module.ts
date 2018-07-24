@@ -8,12 +8,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AgGridModule } from 'ag-grid-angular';
+import { ViewXmlComponent } from './view-xml/view-xml.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    TableComponent
+    TableComponent,
+    ViewXmlComponent
   ],
   imports: [
     BrowserModule,

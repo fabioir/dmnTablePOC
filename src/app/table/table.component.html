@@ -1,7 +1,10 @@
 <h1>DMN stuff</h1>
 <button (click)="parseLocalXML()">Parse local XML</button>
+<button (click)="saveToXML()">Store to XML</button>
+<button (click)="updateFromDecisionTable()">Update from current DMN decision table</button>
+<button (click)="parseToTable()">Put the DMN into the Table Object</button>
 <br>
-<a href="/assets/table.dmn">Download the XML</a>
+<a href="/viewXML">Download the XML</a>
 <br>
 <br>
 
@@ -27,4 +30,3 @@
 <div>
     <input type="file" (change)="onFileChanged($event)"/>
 </div>
-<button (click)="logFile()">Log file</button>

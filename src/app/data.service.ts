@@ -17,6 +17,10 @@ export class DataService {
 
   constructor() { }
 
+  /**
+   * Sets the .dmn document
+   * @param xml new .dmn document
+   */
   setXML(xml: string) {
     if (xml) {
       this.xml = xml
@@ -26,6 +30,10 @@ export class DataService {
     }
   }
 
+  /**
+   * Sets the DMN Moddle object
+   * @param dmn object created with the Moddle
+   */
   setDMN(dmn: Definitions) {
     console.log("setting dmn in data service");
     if (dmn) {
@@ -36,6 +44,10 @@ export class DataService {
     }
   }
 
+  /**
+   * Sets the Decision table
+   * @param table Object DecisionTable
+   */
   setTable(table: DecisionTable) {
     if (table) {
       this.table = table;
@@ -45,14 +57,23 @@ export class DataService {
     }
   }
 
+  /**
+   * Returns an observable with the .dmn document updates
+   */
   getXMLUpdates(): Observable<string> {
     return <Observable<string>>this.xmlUpdate.asObservable();
   }
 
+  /**
+   * Returns an observable with the DMN Moddle object updates
+   */
   getDMNUpdates(): Observable<Definitions> {
     return <Observable<Definitions>>this.dmnUpdate.asObservable();
   }
 
+  /**
+   * Returns an observable with the Decision Table updates
+   */
   getTableUpdates(): Observable<DecisionTable> {
     return <Observable<DecisionTable>>this.tableUpdate.asObservable();
   }

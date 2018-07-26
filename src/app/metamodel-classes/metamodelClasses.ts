@@ -25,10 +25,21 @@ export class DecisionTable {
     //Extra
     id: string;
 
-    newInput(inputClause) {
+    newInput(inputClause: InputClause) {
         console.log(this.input)
         this.input.push(inputClause);
         console.log(this.input)
+    }
+    newInputEntry(inputEntry: UnaryTests) {
+        this.rule.forEach(rule => { rule.inputEntry.push(inputEntry) });
+    }
+
+    newOutput(outputClause: OutputClause) {
+        this.output.push(outputClause)
+    }
+
+    newOutputEntry(outputEntry: LiteralExpression) {
+        this.rule.forEach(rule => { rule.outputEntry.push(outputEntry) });
     }
 }
 

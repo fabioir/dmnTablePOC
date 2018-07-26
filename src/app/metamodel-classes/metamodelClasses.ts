@@ -5,7 +5,7 @@ export class Definitions {
     drgElements: Array<ModdleElement>;
 }
 
-export class ModdleElement{
+export class ModdleElement {
     id: string;
     name: string;
     decisionTable: DecisionTable;
@@ -24,6 +24,12 @@ export class DecisionTable {
 
     //Extra
     id: string;
+
+    newInput(inputClause) {
+        console.log(this.input)
+        this.input.push(inputClause);
+        console.log(this.input)
+    }
 }
 
 export class InputClause {
@@ -42,7 +48,7 @@ export class DecisionRule {
     inputEntry: Array<UnaryTests> = [];//UnaryTest[0..*]
     outputEntry: Array<LiteralExpression> = [];//LiteralExpression[1..*]
 
-    clone(rule: DecisionRule){
+    clone(rule: DecisionRule) {
 
         rule.inputEntry.forEach(inputEntry => {
             let newInputEntry = new UnaryTests();
@@ -77,7 +83,7 @@ export class LiteralExpression {
         this.importedValues = new ImportedValues();
     }
 
-    clone(literalExpression: LiteralExpression){
+    clone(literalExpression: LiteralExpression) {
         this.text = literalExpression.text;
         this.expressionLanguage = literalExpression.expressionLanguage;
         this.importedValues.clone(literalExpression.importedValues);
@@ -94,26 +100,26 @@ export class ImportedValues {
     expressionLanguage: string; //URI [0..1]
     importedElement: string; //[0..1]
 
-    constructor(){
+    constructor() {
         this.expressionLanguage = '';
         this.importedElement = '';
     }
 
-    clone(importedValues: ImportedValues){
-        if(importedValues){
-        this.expressionLanguage = importedValues.expressionLanguage;
-        this.importedElement = importedValues.importedElement;
+    clone(importedValues: ImportedValues) {
+        if (importedValues) {
+            this.expressionLanguage = importedValues.expressionLanguage;
+            this.importedElement = importedValues.importedElement;
         }
     }
 }
 /**
  * Allowed values
  *  */
-export class UnaryTests{
+export class UnaryTests {
     expressionLanguage: string; //URI [0..1]
     text: string;
 
-    clone(unaryTests: UnaryTests){
+    clone(unaryTests: UnaryTests) {
         this.expressionLanguage = unaryTests.expressionLanguage;
         this.text = unaryTests.text;
     }
@@ -147,7 +153,7 @@ export enum ReverseHitPolicy {
     OUTPUTORDER = "O"
 }
 
-export enum BuiltinAggregator { 
+export enum BuiltinAggregator {
     SUM = "SUM",
     COUNT = "COUNT",
     MIN = "MIN",

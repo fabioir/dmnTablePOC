@@ -43,24 +43,33 @@ export class TableComponent implements OnInit, OnDestroy {
   onCellClicked(params) {
 
     let rowData = this.agGrid.api.getRenderedNodes();
-    console.log(rowData);
+    //console.log(rowData);
     let lastRow = rowData[rowData.length - 1];
     if (lastRow.data.number === params.data.number) {
       this.addRow();
-      console.log("Last row clicked");
+      //console.log("Last row clicked");
     }
   }
 
-  addRow() { 
+  addRow() {
     let rule = this.decisionTable.rule[0];
     const newRule = new _.DecisionRule();
     newRule.clone(rule);
 
-    newRule.inputEntry.forEach(input => {input.text = '-'});
-    newRule.outputEntry.forEach(output => {output.text = '-'});
+    newRule.inputEntry.forEach(input => { input.text = '-' });
+    newRule.outputEntry.forEach(output => { output.text = '-' });
     this.decisionTable.rule.push(newRule);
     this.dataService.setTable(this.decisionTable);
-    //this.updateCells()
+  }
+
+  addInput() {
+    this.decisionTable.newInput(this.dmnService.newInput());
+    console.log(this.agGrid.gridOptions.columnDefs);
+    this.updateFromDecisionTable();
+
+    let columnDefs = this.agGrid.columnApi.getAllColumns();
+    console.log(this.decisionTable.rule);
+    //this.agGrid.api.setColumnDefs(columnDefs);
   }
 
   /**
@@ -165,6 +174,7 @@ export class TableComponent implements OnInit, OnDestroy {
 
     //Setting columns to the grid (When in edition step we'll have to check synchro among displayed and stored table)
     this.agGrid.api.setColumnDefs(columnDefs);
+    console.log(this.agGrid.columnApi.getAllColumns());
   }
 
   /**
@@ -175,7 +185,7 @@ export class TableComponent implements OnInit, OnDestroy {
     let count = 1;
     if (this.decisionTable) {
       this.decisionTable.input.forEach(input => {
-        columns.push({ headerName: `${input.inputExpression.text} (${input.inputExpression.typeRef})`, field: `iv${count}`, editable: true, colId: `input${count + 1}` });
+        columns.push({ headerName: `${input.inputExpression.text} (${input.inputExpression.typeRef})`, field: `iv${count}`, editable: true, colId: `input${count}` });
         //Make sure you know what to put here. Might need to change the Metamodel
         //Let's take care of specification conformance
         count++;
@@ -202,7 +212,7 @@ export class TableComponent implements OnInit, OnDestroy {
     if (this.decisionTable) {
       this.decisionTable.output.forEach(output => {
         //console.log(output)
-        columns.push({ headerName: `${output.typeRef}`, field: `ov${count}`, editable: true, colId: `output${count + 1}` });
+        columns.push({ headerName: `${output.typeRef}`, field: `ov${count}`, editable: true, colId: `output${count}` });
         count++;
       });
       if (this.decisionTable.output.length === 0) {
@@ -254,7 +264,7 @@ export class TableComponent implements OnInit, OnDestroy {
 
     //Setting rows to the grid (When in edition step we'll have to check synchro among displayed and stored table)
     this.agGrid.api.setRowData(rowData);
-    console.log(this.agGrid.api.getRenderedNodes())
+    //console.log(this.agGrid.api.getRenderedNodes())
   }
 
   /**

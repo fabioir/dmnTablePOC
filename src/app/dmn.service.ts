@@ -136,12 +136,12 @@ export class DmnService implements OnInit, OnDestroy {
    */
   toDecisionTable(dmn: any) {
     this.currentDMN = this.dataService.dmn;
-    
-    if(!this.currentDMN){
+
+    if (!this.currentDMN) {
       console.log("Current dmn is empty");
       return;
     }
-    
+
     //Create currentDecisionTable
     //console.log(`Current DMN:`);
     //console.log(this.currentDMN);
@@ -174,6 +174,20 @@ export class DmnService implements OnInit, OnDestroy {
     //console.log(this.currentDecisionTable.input);
     this.currentDMNUpdates.next(this.currentDecisionTable);
     this.dataService.setTable(this.currentDecisionTable);
+  }
+
+  newInput(): any {
+    let inputExpression = this.dmn.create('dmn:LiteralExpression');
+    //id text typeref
+    inputExpression.set('id','');
+    inputExpression.set('text','Input Expression');
+    inputExpression.set('typeRef',`${_.QName.string}`);
+    let inputClause = this.dmn.create('dmn:InputClause');
+    inputClause.set('id', '');
+    inputClause.set('label', '');
+    inputClause.set('inputExpression', inputExpression);
+
+    return inputClause;
   }
 
 }

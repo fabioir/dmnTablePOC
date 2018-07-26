@@ -3,8 +3,12 @@
 <button (click)="saveToXML()">Store to XML</button>
 <button (click)="updateFromDecisionTable()">Update from current DMN decision table</button>
 <button (click)="parseToTable()">Put the DMN into the Table Object</button>
+<button (click)="sizeToFit()">Size columns to fit</button>
+<button (click)="autoSize()">Autosize columns</button>
+<button (click)="go()">GO</button>
 <br>
 <a routerLink="/viewXML">Download the XML</a>
+<a download="Generated.txt" href="{{url}}" download>Download</a>
 <br>
 <br>
 
@@ -24,6 +28,7 @@
     (cellClicked)="onCellClicked($event)"
     (gridReady)="onGridReady($event)"
     (cellValueChanged)="onCellEdit($event)"
+    (rowDragEnd)="onCellEdit($event)"
     >
 </ag-grid-angular>
 

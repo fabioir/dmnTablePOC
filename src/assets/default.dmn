@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" id="definitions_1kb5gev" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
-  <decision id="decision_0gvg2lm" name="">
+<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" id="defaultDefinitions" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
+  <decision id="defaultDecision" name="">
     <decisionTable id="decisionTable">
       <input id="input1" label="">
         <inputExpression id="inputExpression1" typeRef="string">
@@ -8,6 +8,14 @@
         </inputExpression>
       </input>
       <output id="output1" label="" name="" typeRef="string" />
+      <rule id="rule1">
+        <inputEntry id="rule1input1">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="rule1output1">
+          <text>-</text>
+        </outputEntry>
+      </rule>
     </decisionTable>
   </decision>
 </definitions>

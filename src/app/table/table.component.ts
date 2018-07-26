@@ -20,7 +20,9 @@ export class TableComponent implements OnInit, OnDestroy {
   @ViewChild('agGrid') agGrid: AgGridNg2;
   decisionTable: _.DecisionTable; //Attached to a Observable from the data service
   decisionTableSubscription: Subscription;
-
+  xmlSubscription: Subscription;
+  xml;
+  url;
 
   constructor(
     private dmnService: DmnService,
@@ -31,9 +33,11 @@ export class TableComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.dmnService.defaultStart(); //Import default table
     this.keepTableUpdated(); //Subscribe to table changes
+    this.keepXMLUpdated();
   }
   ngOnDestroy() {
     this.decisionTableSubscription.unsubscribe();
+    this.xmlSubscription.unsubscribe();
   }
   onGridReady(params) {
     console.log("The grid is ready");
@@ -66,7 +70,10 @@ export class TableComponent implements OnInit, OnDestroy {
 
   addInput() {
     this.decisionTable.newInput(this.dmnService.newInput());
-    this.decisionTable.newInputEntry(this.dmnService.newInputEntry());
+
+    if (this.decisionTable.rule) {
+      this.decisionTable.newInputEntry(this.dmnService.newInputEntry());
+    }
     console.log(this.agGrid.gridOptions.columnDefs);
     this.updateFromDecisionTable();
 
@@ -77,7 +84,11 @@ export class TableComponent implements OnInit, OnDestroy {
 
   addOutput() {
     this.decisionTable.newOutput(this.dmnService.newOutput());
-    this.decisionTable.newOutputEntry(this.dmnService.newOutputEntry());
+
+    if (this.decisionTable.rule) {
+      this.decisionTable.newOutputEntry(this.dmnService.newOutputEntry());
+    }
+
     this.updateFromDecisionTable();
   }
 
@@ -120,6 +131,14 @@ export class TableComponent implements OnInit, OnDestroy {
       this.decisionTable = decisionTable;
       this.updateFromDecisionTable();
     });
+  }
+
+  keepXMLUpdated(){
+    this.xml = this.dataService.xml;
+    
+    this.xmlSubscription = this.dataService.getXMLUpdates().subscribe(xml => {
+      this.xml = xml;
+    })
   }
 
 
@@ -277,6 +296,21 @@ export class TableComponent implements OnInit, OnDestroy {
    */
   example() {
     this.dmnService.importXML('/assets/table.dmn');
+  }
+
+  go() { 
+    let blob = new Blob([this.xml], {type : 'text/html'});
+    console.log(blob);
+    this.url = window.URL.createObjectURL(blob);
+  }
+  sizeToFit(){
+    this.agGrid.api.sizeColumnsToFit();
+  }
+  autoSize(){
+    this.agGrid.columnApi.autoSizeAllColumns();
+  }
+  onCellEdit(params){
+    console.log(params);
   }
 
 }

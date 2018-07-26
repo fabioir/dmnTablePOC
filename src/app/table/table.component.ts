@@ -64,19 +64,12 @@ export class TableComponent implements OnInit, OnDestroy {
 
   addInput() {
     this.decisionTable.newInput(this.dmnService.newInput());
-    this.decisionTable.newInputEntry(this.dmnService.newInputEntry());
     console.log(this.agGrid.gridOptions.columnDefs);
     this.updateFromDecisionTable();
 
     let columnDefs = this.agGrid.columnApi.getAllColumns();
-    console.log(this.decisionTable);
+    console.log(this.decisionTable.rule);
     //this.agGrid.api.setColumnDefs(columnDefs);
-  }
-
-  addOutput() {
-    this.decisionTable.newOutput(this.dmnService.newOutput());
-    this.decisionTable.newOutputEntry(this.dmnService.newOutputEntry());
-    this.updateFromDecisionTable();
   }
 
   /**

@@ -25,57 +25,16 @@ export class DecisionTable {
     //Extra
     id: string;
 
-    newInput(inputClause: InputClause) {
+    newInput(inputClause) {
+        console.log(this.input)
         this.input.push(inputClause);
-    }
-
-    newInputEntry(inputEntry: UnaryTests) {
-        this.rule.forEach(rule => { rule.inputEntry.push(inputEntry) });
-    }
-
-    newOutput(outputClause: OutputClause) {
-        this.output.push(outputClause)
-    }
-
-    newOutputEntry(outputEntry: LiteralExpression) {
-        this.rule.forEach(rule => { rule.outputEntry.push(outputEntry) });
-    }
-
-    /**
-     * It checks every element has its own id
-     */
-    checkId() {
-
-        if (!this.id) {
-            this.id = `DecisionTable${Math.round(Math.random() * 100000) / 100}`;
-        }
-       /* this.input.forEach(input => {
-            input.checkId();
-        });
-        this.output.forEach(output => {
-            output.checkId();
-        });
-        this.rule.forEach(rule => {
-            rule.checkId();
-        });*/
-
+        console.log(this.input)
     }
 }
 
 export class InputClause {
     inputExpression: Expression;//Expression[0..1]
     inputEntry: Expression;//Expression[*]
-
-    //Extra
-    id: string;
-    checkId() {
-        if (!this.id) {
-            this.id = `DecisionTable${Math.round(Math.random() * 100000) / 100}`;
-        }
-        this.inputExpression.checkId();
-        this.inputEntry.checkId();
-    }
-
 }
 
 export class OutputClause {
@@ -83,17 +42,6 @@ export class OutputClause {
     name: string; //string[0..1]
     outputEntry: Expression; //Expression[*]
     defaultOutputEntry: Expression; //Expression[0..1]
-
-    //Extra
-    id: string;
-    checkId() {
-        if (!this.id) {
-            this.id = `DecisionTable${Math.round(Math.random() * 100000) / 100}`;
-        }
-        this.outputEntry.checkId();
-        this.defaultOutputEntry.checkId();
-
-    }
 }
 
 export class DecisionRule {
@@ -113,22 +61,6 @@ export class DecisionRule {
             newOutputEntry.clone(outputEntry);
             this.outputEntry.push(newOutputEntry)
         });
-    }
-
-    //Extra
-    id: string;
-    checkId() {
-        if (!this.id) {
-            this.id = `DecisionTable${Math.round(Math.random() * 100000) / 100}`;
-        }
-
-        this.inputEntry.forEach(inputEntry => {
-            inputEntry.checkId();
-        });
-        this.outputEntry.forEach(outputEntry => {
-            outputEntry.checkId();
-        });
-
     }
 }
 
@@ -156,28 +88,12 @@ export class LiteralExpression {
         this.expressionLanguage = literalExpression.expressionLanguage;
         this.importedValues.clone(literalExpression.importedValues);
     }
-
-    //Extra
-    id: string;
-    checkId() {
-        if (!this.id) {
-            this.id = `DecisionTable${Math.round(Math.random() * 100000) / 100}`;
-        }
-    }
 }
 
 export class Expression {
     text: string;
     typeRef: QName; //[0..1]
     expressionLanguage: string;     //Expressed in URI format [0..1]
-
-    //extra
-    id: string;
-    checkId() {
-        if (!this.id) {
-            this.id = `DecisionTable${Math.round(Math.random() * 100000) / 100}`;
-        }
-    }
 }
 
 export class ImportedValues {
@@ -196,7 +112,6 @@ export class ImportedValues {
         }
     }
 }
-
 /**
  * Allowed values
  *  */
@@ -207,14 +122,6 @@ export class UnaryTests {
     clone(unaryTests: UnaryTests) {
         this.expressionLanguage = unaryTests.expressionLanguage;
         this.text = unaryTests.text;
-    }
-
-    //Extra
-    id: string;
-    checkId() {
-        if (!this.id) {
-            this.id = `DecisionTable${Math.round(Math.random() * 100000) / 100}`;
-        }
     }
 }
 

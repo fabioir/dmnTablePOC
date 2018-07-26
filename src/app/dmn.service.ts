@@ -40,20 +40,6 @@ export class DmnService implements OnInit, OnDestroy {
     this.tableUpdates.unsubscribe();
   }
 
-  /**
-   * Initial tasks common to every execution. Imports a default model
-   */
-  defaultStart() {
-    this.subscribeToChanges();
-    console.log("Default start");
-    this.importXML('../../assets/default.dmn');
-    console.log(this.dataService.xml);
-    this.toDecisionTable(this.currentDMN);
-  }
-
-  /**
-   * Makes sure XML, decisionTable and DMN are up to date with the ones in data service
-   */
   subscribeToChanges() {
 
     this.dmnUpdates = this.dataService.getDMNUpdates().subscribe(dmn => {
@@ -77,7 +63,13 @@ export class DmnService implements OnInit, OnDestroy {
 
   }
 
-  
+  defaultStart() {
+    this.subscribeToChanges();
+    console.log("Default start");
+    this.importXML('../../assets/default.dmn');
+    console.log(this.dataService.xml);
+    this.toDecisionTable(this.currentDMN);
+  }
 
   /**
    * Returns an Observable<DecisionTable> with the current decision table.
@@ -115,7 +107,8 @@ export class DmnService implements OnInit, OnDestroy {
    * Creates a text file in XML and stores it (still doesn't write) where indicated in file
    */
   saveToXML(file: any) {
-    this.dmn.toXML(this.dataService.dmn, (err, res) => {
+
+    this.dmn.toXML(this.currentDMN, (err, res) => {
       this.currentXML = res;
       if (err) {
         console.log(err);
@@ -130,6 +123,7 @@ export class DmnService implements OnInit, OnDestroy {
    * This function uses the object DecisionTable to instantiate a DMN with the same info.
    */
   toDMN(table: _.DecisionTable) {
+
     this.currentDMN.drgElements[0].decisionTable = table;
     this.dataService.setDMN(this.currentDMN);
     //console.log(this.currentDMN);
@@ -182,16 +176,12 @@ export class DmnService implements OnInit, OnDestroy {
     this.dataService.setTable(this.currentDecisionTable);
   }
 
-  /**
-   * Prepares and returns a DMN object to instantiate a new input in a Decision Table 
-   */
   newInput(): any {
     let inputExpression = this.dmn.create('dmn:LiteralExpression');
     //id text typeref
-    inputExpression.set('id', '');
-    inputExpression.set('text', 'Input Expression');
-    inputExpression.set('typeRef', `${_.QName.string}`);
-
+    inputExpression.set('id','');
+    inputExpression.set('text','Input Expression');
+    inputExpression.set('typeRef',`${_.QName.string}`);
     let inputClause = this.dmn.create('dmn:InputClause');
     inputClause.set('id', '');
     inputClause.set('label', '');
@@ -200,37 +190,4 @@ export class DmnService implements OnInit, OnDestroy {
     return inputClause;
   }
 
-  /**
-   * Prepares and returns a new Input Entry for the rules in a Decision Table
-   */
-  newInputEntry(): any {
-    let inputEntry = this.dmn.create('dmn:UnaryTests');
-    inputEntry.set('id', '');
-    inputEntry.set('text', '-');
-
-    return inputEntry;
-  }
-
-  /**
-   *  Prepares and returns a DMN object to instantiate a new output in a Decision Table 
-   */
-  newOutput(): any {
-    let outputClause = this.dmn.create('dmn:OutputClause');
-    //Should I set a label? Review the specs
-    outputClause.set('id', '');
-    outputClause.set('typeRef', 'string');
-
-    return outputClause;
-  }
-
-  /**
-   * Prepares and returns a new Output Entry for the rules in a Decision Table
-   */
-  newOutputEntry(): any {
-    let outputEntry = this.dmn.create('dmn:LiteralExpression');
-    outputEntry.set('id', '');
-    outputEntry.set('text', '-');
-
-    return outputEntry;
-  }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Definitions, DecisionTable } from './metamodel-classes/metamodelClasses';
 import { Observable, Subject } from 'rxjs';
+import { DmnService } from './dmn.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,12 @@ export class DataService {
   dmnUpdate = new Subject();
   tableUpdate = new Subject();
 
-  constructor() { }
+  constructor(private dmnService: DmnService) { }
 
+  /**
+   * Sets the .dmn document
+   * @param xml new .dmn document
+   */
   setXML(xml: string) {
     if (xml) {
       this.xml = xml
@@ -26,6 +31,10 @@ export class DataService {
     }
   }
 
+  /**
+   * Sets the DMN Moddle object
+   * @param dmn object created with the Moddle
+   */
   setDMN(dmn: Definitions) {
     console.log("setting dmn in data service");
     if (dmn) {
@@ -36,23 +45,39 @@ export class DataService {
     }
   }
 
+  /**
+   * Sets the Decision table
+   * @param table Object DecisionTable
+   */
   setTable(table: DecisionTable) {
     if (table) {
       this.table = table;
+      this.table.checkId();
       this.tableUpdate.next(this.table);
+      //this.dmnService.toDMN(this.table);
+
     } else {
       console.log("Decision Table problem");
     }
   }
 
+  /**
+   * Returns an observable with the .dmn document updates
+   */
   getXMLUpdates(): Observable<string> {
     return <Observable<string>>this.xmlUpdate.asObservable();
   }
 
+  /**
+   * Returns an observable with the DMN Moddle object updates
+   */
   getDMNUpdates(): Observable<Definitions> {
     return <Observable<Definitions>>this.dmnUpdate.asObservable();
   }
 
+  /**
+   * Returns an observable with the Decision Table updates
+   */
   getTableUpdates(): Observable<DecisionTable> {
     return <Observable<DecisionTable>>this.tableUpdate.asObservable();
   }

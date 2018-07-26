@@ -58,7 +58,9 @@ export class TableComponent implements OnInit, OnDestroy {
 
     newRule.inputEntry.forEach(input => { input.text = '-' });
     newRule.outputEntry.forEach(output => { output.text = '-' });
-    this.decisionTable.rule.push(newRule);
+    console.log(this.decisionTable)
+    this.decisionTable.rule.push(this.dmnService.newRule(newRule));
+    //console.log();
     this.dataService.setTable(this.decisionTable);
   }
 
@@ -120,10 +122,6 @@ export class TableComponent implements OnInit, OnDestroy {
     });
   }
 
-  //Necessary?
-  parseToTable() {
-    this.dmnService.toDecisionTable({});
-  }
 
 
   saveToXML() {

@@ -233,4 +233,42 @@ export class DmnService implements OnInit, OnDestroy {
 
     return outputEntry;
   }
+
+  newRule(rule: _.DecisionRule): any {
+    let newRule = this.dmn.create('dmn:DecisionRule');
+    newRule.set('id', '');
+    newRule.set('description', '');
+
+    let inputEntries = [];
+    rule.inputEntry.forEach(inputEntry => {
+      let newInputEntry = this.dmn.create('dmn:UnaryTests');
+      newInputEntry.set('expressionLanguage', inputEntry.expressionLanguage);
+      newInputEntry.set('text', inputEntry.text);
+
+      inputEntries.push(newInputEntry);
+
+    });
+    newRule.set('inputEntry', inputEntries);
+
+    let outputEntries = [];
+    rule.outputEntry.forEach(outputEntry => {
+      let newOutputEntry = this.dmn.create('dmn:LiteralExpression');
+
+      newOutputEntry.set('text', outputEntry.text);
+      newOutputEntry.set('expressionLanguage', outputEntry.expressionLanguage);
+
+      if (outputEntry.importedValues) {
+        let newImportedValues = this.dmn.create('dmn:ImportedValues');
+        newImportedValues.set('expressionLanguage', outputEntry.importedValues.expressionLanguage);
+        newImportedValues.set('importedElement', outputEntry.importedValues.importedElement);
+
+        newOutputEntry.set('importedValues', newImportedValues);
+      }
+
+      outputEntries.push(newOutputEntry);
+    });
+    newRule.set('outputEntry', outputEntries);
+
+    return newRule;
+  }
 }

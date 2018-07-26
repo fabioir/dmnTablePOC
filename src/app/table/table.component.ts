@@ -40,6 +40,29 @@ export class TableComponent implements OnInit, OnDestroy {
     //this.updateFromDecisionTable();
   }
 
+  onCellClicked(params) {
+
+    let rowData = this.agGrid.api.getRenderedNodes();
+    console.log(rowData);
+    let lastRow = rowData[rowData.length - 1];
+    if (lastRow.data.number === params.data.number) {
+      this.addRow();
+      console.log("Last row clicked");
+    }
+  }
+
+  addRow() { 
+    let rule = this.decisionTable.rule[0];
+    const newRule = new _.DecisionRule();
+    newRule.clone(rule);
+
+    newRule.inputEntry.forEach(input => {input.text = '-'});
+    newRule.outputEntry.forEach(output => {output.text = '-'});
+    this.decisionTable.rule.push(newRule);
+    this.dataService.setTable(this.decisionTable);
+    //this.updateCells()
+  }
+
   /**
    * 
    * @param event file uploaded triggers a change event
@@ -231,6 +254,7 @@ export class TableComponent implements OnInit, OnDestroy {
 
     //Setting rows to the grid (When in edition step we'll have to check synchro among displayed and stored table)
     this.agGrid.api.setRowData(rowData);
+    console.log(this.agGrid.api.getRenderedNodes())
   }
 
   /**

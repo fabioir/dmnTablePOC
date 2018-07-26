@@ -41,6 +41,21 @@ export class OutputClause {
 export class DecisionRule {
     inputEntry: Array<UnaryTests> = [];//UnaryTest[0..*]
     outputEntry: Array<LiteralExpression> = [];//LiteralExpression[1..*]
+
+    clone(rule: DecisionRule){
+
+        rule.inputEntry.forEach(inputEntry => {
+            let newInputEntry = new UnaryTests();
+            newInputEntry.clone(inputEntry);
+            this.inputEntry.push(newInputEntry)
+        });
+
+        rule.outputEntry.forEach(outputEntry => {
+            let newOutputEntry = new LiteralExpression();
+            newOutputEntry.clone(outputEntry);
+            this.outputEntry.push(newOutputEntry)
+        });
+    }
 }
 
 export class InputEntry {
@@ -55,6 +70,18 @@ export class LiteralExpression {
     text: string;                   //[0..1]
     expressionLanguage: string;     //Expressed in URI format [0..1]
     importedValues: ImportedValues;         //[0..1]
+
+    constructor() {
+        this.text = '';
+        this.expressionLanguage = '';
+        this.importedValues = new ImportedValues();
+    }
+
+    clone(literalExpression: LiteralExpression){
+        this.text = literalExpression.text;
+        this.expressionLanguage = literalExpression.expressionLanguage;
+        this.importedValues.clone(literalExpression.importedValues);
+    }
 }
 
 export class Expression {
@@ -66,6 +93,18 @@ export class Expression {
 export class ImportedValues {
     expressionLanguage: string; //URI [0..1]
     importedElement: string; //[0..1]
+
+    constructor(){
+        this.expressionLanguage = '';
+        this.importedElement = '';
+    }
+
+    clone(importedValues: ImportedValues){
+        if(importedValues){
+        this.expressionLanguage = importedValues.expressionLanguage;
+        this.importedElement = importedValues.importedElement;
+        }
+    }
 }
 /**
  * Allowed values
@@ -73,6 +112,11 @@ export class ImportedValues {
 export class UnaryTests{
     expressionLanguage: string; //URI [0..1]
     text: string;
+
+    clone(unaryTests: UnaryTests){
+        this.expressionLanguage = unaryTests.expressionLanguage;
+        this.text = unaryTests.text;
+    }
 }
 
 //Enumerations

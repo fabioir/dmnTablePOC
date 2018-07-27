@@ -134,9 +134,9 @@ export class TableComponent implements OnInit, OnDestroy {
     });
   }
 
-  keepXMLUpdated(){
+  keepXMLUpdated() {
     this.xml = this.dataService.xml;
-    
+
     this.xmlSubscription = this.dataService.getXMLUpdates().subscribe(xml => {
       this.xml = xml;
     })
@@ -299,18 +299,31 @@ export class TableComponent implements OnInit, OnDestroy {
     this.dmnService.importXML('/assets/table.dmn');
   }
 
-  go() { 
-    let blob = new Blob([this.xml], {type : 'text/html'});
-    console.log(blob);
-    this.url = window.URL.createObjectURL(blob);
+  downloadDMN() {
+    var pom = document.createElement('a');
+    var filename = "file.dmn";
+    let blob = new Blob([this.xml], { type: 'text/plain' });
+
+    pom.setAttribute('href', window.URL.createObjectURL(blob));
+    pom.setAttribute('download', filename);
+
+    pom.draggable = true;
+    pom.classList.add('dragout');
+
+    pom.click();
   }
-  sizeToFit(){
+  sizeToFit() {
     this.agGrid.api.sizeColumnsToFit();
   }
-  autoSize(){
+  autoSize() {
     this.agGrid.columnApi.autoSizeAllColumns();
   }
-  onCellEdit(params){
+
+  /**
+   * Manages the edition of the table and reflects it in the Decision Table Object stored in the data service
+   * @param params The edition event triggered by the grid
+   */
+  onCellEdit(params) {
     console.log(params);
     console.log(this.agGrid.columnApi.getAllColumns())
     console.log(this.dataService.table);
@@ -322,20 +335,20 @@ export class TableComponent implements OnInit, OnDestroy {
     let index;
 
 
-    for(let colIndex = 0; colIndex < columns.length; colIndex++){
-      if(columns[colIndex] === col){
-        console.log('Columns match ' + (params.rowIndex + 1) + ' ' + colIndex); 
+    for (let colIndex = 0; colIndex < columns.length; colIndex++) {
+      if (columns[colIndex] === col) {
+        console.log('Columns match ' + (params.rowIndex + 1) + ' ' + colIndex);
         index = colIndex;
         break;
       }
     }
     let inputEntryLength = newDecisionTable.rule[params.rowIndex].inputEntry.length;
-    if(inputEntryLength >= (index)){
-      
-      newDecisionTable.rule[params.rowIndex].inputEntry[index-1].text = params.newValue;
+    if (inputEntryLength >= (index)) {
+
+      newDecisionTable.rule[params.rowIndex].inputEntry[index - 1].text = params.newValue;
       this.dataService.setTable(newDecisionTable);
-    }else{
-      newDecisionTable.rule[params.rowIndex].outputEntry[index -1 -inputEntryLength].text = params.newValue;
+    } else {
+      newDecisionTable.rule[params.rowIndex].outputEntry[index - 1 - inputEntryLength].text = params.newValue;
       this.dataService.setTable(newDecisionTable);
     }
   }

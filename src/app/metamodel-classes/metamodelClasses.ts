@@ -130,6 +130,9 @@ export class UnaryTests {
     expressionLanguage: string; //URI [0..1]
     text: string;
 
+    //extra
+    id: string;
+    
     clone(unaryTests: UnaryTests) {
         this.expressionLanguage = unaryTests.expressionLanguage;
         this.text = unaryTests.text;

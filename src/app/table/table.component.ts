@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { DataService } from '../data.service';
 
 import * as _ from '../metamodel-classes/metamodelClasses';
+import { equalParamsAndUrlSegments } from '../../../node_modules/@angular/router/src/router_state';
 
 @Component({
   selector: 'app-table',
@@ -311,6 +312,32 @@ export class TableComponent implements OnInit, OnDestroy {
   }
   onCellEdit(params){
     console.log(params);
+    console.log(this.agGrid.columnApi.getAllColumns())
+    console.log(this.dataService.table);
+    let newDecisionTable = this.dataService.table;
+
+    //Find out the index of the column
+    let col = params.column;
+    let columns = this.agGrid.columnApi.getAllColumns();
+    let index;
+
+
+    for(let colIndex = 0; colIndex < columns.length; colIndex++){
+      if(columns[colIndex] === col){
+        console.log('Columns match ' + (params.rowIndex + 1) + ' ' + colIndex); 
+        index = colIndex;
+        break;
+      }
+    }
+    let inputEntryLength = newDecisionTable.rule[params.rowIndex].inputEntry.length;
+    if(inputEntryLength >= (index)){
+      
+      newDecisionTable.rule[params.rowIndex].inputEntry[index-1].text = params.newValue;
+      this.dataService.setTable(newDecisionTable);
+    }else{
+      newDecisionTable.rule[params.rowIndex].outputEntry[index -1 -inputEntryLength].text = params.newValue;
+      this.dataService.setTable(newDecisionTable);
+    }
   }
 
 }

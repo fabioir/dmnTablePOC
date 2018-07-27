@@ -1,11 +1,13 @@
-<span>
-  
+<div class="{{class}}">
+  <span>
+
     <mat-form-field>
-      <input  (blur)="enter()" type="text" name="cellText" [(ngModel)]="text" matInput>
+      <input (blur)="enter()" type="text" name="cellText" [(ngModel)]="text" matInput>
     </mat-form-field>
-    <button (click)="edition()" mat-raised-button>
-        <mat-icon>create</mat-icon>
+    <button (click)="edition()" class="button-edition" mat-button>
+      <mat-icon>create</mat-icon>
     </button>
-  
-  
-</span>
+
+
+  </span>
+</div>

@@ -2,3 +2,11 @@
 @import "~ag-grid/dist/styles/ag-grid.css";
 @import "~ag-grid/dist/styles/ag-theme-balham.css";
 @import '~ag-grid/dist/styles/ag-theme-material.css';
+
+.input-cell{
+    background-color: rgb(191, 238, 191);
+}
+
+.output-cell{
+    background-color: rgb(252, 200, 180);
+}

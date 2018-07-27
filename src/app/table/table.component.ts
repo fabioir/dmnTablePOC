@@ -38,20 +38,36 @@ export class TableComponent implements OnInit, OnDestroy {
     private dataService: DataService
   ) { }
 
+  /**
+   * Loads the default dmn XML stored in assets. Suscribes to the data service changes in the DMN and the XML
+   */
   ngOnInit() {
     this.dmnService.defaultStart(); //Import default table
     this.keepTableUpdated(); //Subscribe to table changes
     this.keepXMLUpdated();
   }
+
+  /**
+   * Unsuscribes the observables
+   */
   ngOnDestroy() {
     this.decisionTableSubscription.unsubscribe();
     this.xmlSubscription.unsubscribe();
   }
+
+  /**
+   * Currently not being used
+   * @param params event parameters
+   */
   onGridReady(params) {
     console.log("The grid is ready");
     //this.updateFromDecisionTable();
   }
 
+  /**
+   * Checks if the clicked cell is in the last row and adds a new row if it was so
+   * @param params parameters of the event
+   */
   onCellClicked(params) {
 
     let rowData = this.agGrid.api.getRenderedNodes();
@@ -63,6 +79,10 @@ export class TableComponent implements OnInit, OnDestroy {
     }
   }
 
+  
+  /**
+   * Adds a new row to the dmn through the dmn service.
+   */
   addRow() {
     let rule = this.decisionTable.rule[0];
     const newRule = new _.DecisionRule();
@@ -76,6 +96,9 @@ export class TableComponent implements OnInit, OnDestroy {
     this.dataService.setTable(this.decisionTable);
   }
 
+  /**
+   * Adds a new input to the dmn through the dmn service.
+   */
   addInput() {
     this.decisionTable.newInput(this.dmnService.newInput());
 
@@ -90,6 +113,9 @@ export class TableComponent implements OnInit, OnDestroy {
     //this.agGrid.api.setColumnDefs(columnDefs);
   }
 
+  /**
+   * Adds a new output to the dmn through the dmn service.
+   */
   addOutput() {
     this.decisionTable.newOutput(this.dmnService.newOutput());
 
@@ -127,7 +153,7 @@ export class TableComponent implements OnInit, OnDestroy {
 
 
   /**
-   * Subscribes to current Decision Table in the data service
+   * Subscribes to current Decision Table in the data service and updates the grid every time this is changed
    */
   keepTableUpdated() {
 
@@ -141,6 +167,9 @@ export class TableComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Subscribes to the Observable launched from the data service and keeps the xml updated to being downloaded at any moment
+   */
   keepXMLUpdated() {
     this.xml = this.dataService.xml;
 
@@ -150,7 +179,9 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
 
-
+/**
+ * Manually invoques the dmn service that transforms and stores the current DMN to the XML format
+ */
   saveToXML() {
     this.dmnService.saveToXML('');
   }
@@ -307,6 +338,9 @@ export class TableComponent implements OnInit, OnDestroy {
     this.dmnService.importXML('/assets/table.dmn');
   }
 
+  /**
+   * Generates and downloads a .dmn text file
+   */
   downloadDMN() {
     var pom = document.createElement('a');
     var filename = "file.dmn";
@@ -320,12 +354,26 @@ export class TableComponent implements OnInit, OnDestroy {
 
     pom.click();
   }
+
+  /**
+   * Resizes the grid columns to fit the available space
+   */
   sizeToFit() {
     this.agGrid.api.sizeColumnsToFit();
   }
+
+  /**
+   * Resizes the grid columns to use the optimum space
+   */
   autoSize() {
     this.agGrid.columnApi.autoSizeAllColumns();
   }
+
+  /**
+   * When called with a parameter sets the global policy of display of the columns. 
+   * Called without parameters executes the set policy and calls the appropiate function that resizes the grid.
+   * @param params 'Autosize' or 'Size to fit' (default)
+   */
   sizePolicy(params){
     if(params){
     //console.log(params);
@@ -346,7 +394,7 @@ export class TableComponent implements OnInit, OnDestroy {
    */
   onCellEdit(params) {
     console.log(params);
-    console.log(this.agGrid.columnApi.getAllColumns())
+    console.log(this.agGrid.columnApi.getAllColumns());
     console.log(this.dataService.table);
     let newDecisionTable = this.dataService.table;
 

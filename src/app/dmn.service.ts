@@ -30,10 +30,16 @@ export class DmnService implements OnInit, OnDestroy {
     private dataService: DataService
   ) { }
 
+  /**
+   * keeps the XML, Table and DMN updated respect to the data service
+   */
   ngOnInit() {
     this.subscribeToChanges();
   }
 
+  /**
+   * Unsuscribes to the data service
+   */
   ngOnDestroy() {
     this.dmnUpdates.unsubscribe();
     this.xmlUpdates.unsubscribe();
@@ -51,6 +57,9 @@ export class DmnService implements OnInit, OnDestroy {
     this.toDecisionTable(this.currentDMN);
   }
 
+  /**
+   * keeps the XML, Table and DMN updated respect to the data service
+   */
   subscribeToChanges() {
 
     this.dmnUpdates = this.dataService.getDMNUpdates().subscribe(dmn => {
@@ -77,7 +86,7 @@ export class DmnService implements OnInit, OnDestroy {
 
 
   /**
-   * Returns an Observable<DecisionTable> with the current decision table.
+   * Returns an Observable<DecisionTable> with the current decision table. (Not being used?)
    */
   getUpdates(): Observable<_.DecisionTable> {
     return <Observable<_.DecisionTable>>this.currentDMNUpdates.asObservable();
@@ -234,6 +243,9 @@ export class DmnService implements OnInit, OnDestroy {
     return outputEntry;
   }
 
+  /**
+   * Adds a new rule to the DMN (doesn't work from the columns but from another rule)
+   */
   newRule(rule: _.DecisionRule): any {
     let newRule = this.dmn.create('dmn:DecisionRule');
     newRule.set('id', '');

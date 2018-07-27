@@ -7,7 +7,15 @@
 <button (click)="autoSize()">Autosize columns</button>
 <button (click)="downloadDMN()">Download DMN</button>
 <br>
-<br>
+<mat-button-toggle-group value="Size to fit" #group="matButtonToggleGroup" (change)="sizePolicy($event)">
+        <mat-button-toggle value="Autosize">
+                Autosize
+        </mat-button-toggle>
+        <mat-button-toggle value="Size to fit">
+                Size to fit
+        </mat-button-toggle>
+    </mat-button-toggle-group>
+    <br>
 <br>
 
 <ag-grid-angular 

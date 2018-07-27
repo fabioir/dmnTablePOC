@@ -11,7 +11,7 @@ import { AgGridModule } from 'ag-grid-angular';
 import { ViewXmlComponent } from './view-xml/view-xml.component';
 import { RendererComponent } from './renderer/renderer.component';
 
-import { MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule } from '@angular/material';
+import { MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule, MatButtonToggleModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 
 import { FormsModule } from '@angular/forms';
@@ -22,7 +22,8 @@ import { FormsModule } from '@angular/forms';
     MatFormFieldModule,
     MatInputModule,
     BrowserAnimationsModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonToggleModule
   ],
   declarations: [
     AppComponent,
@@ -40,7 +41,8 @@ import { FormsModule } from '@angular/forms';
     MatInputModule,
     BrowserAnimationsModule,
     MatIconModule,
-    FormsModule
+    FormsModule,
+    MatButtonToggleModule
   ],
   providers: [],
   bootstrap: [AppComponent]

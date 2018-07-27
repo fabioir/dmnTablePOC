@@ -26,6 +26,7 @@ export class TableComponent implements OnInit, OnDestroy {
   xmlSubscription: Subscription;
   xml;
   url;
+  gridSizePolicy = "Size to fit";
 
   private frameworkComponents = {
     renderer: RendererComponent
@@ -160,7 +161,7 @@ export class TableComponent implements OnInit, OnDestroy {
   updateFromDecisionTable() {
     this.updateColumnDefs();
     this.updateCells();
-    this.sizeToFit();
+    this.sizePolicy('');
   }
 
 
@@ -324,6 +325,19 @@ export class TableComponent implements OnInit, OnDestroy {
   }
   autoSize() {
     this.agGrid.columnApi.autoSizeAllColumns();
+  }
+  sizePolicy(params){
+    if(params){
+    //console.log(params);
+    this.gridSizePolicy = params.value;
+    this.sizePolicy('');
+    }else{
+      if(this.gridSizePolicy === "Autosize"){
+        this.autoSize();
+      }else{
+        this.sizeToFit();
+      }
+    }
   }
 
   /**

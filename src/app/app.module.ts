@@ -9,19 +9,35 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AgGridModule } from 'ag-grid-angular';
 import { ViewXmlComponent } from './view-xml/view-xml.component';
+import { RendererComponent } from './renderer/renderer.component';
 
+import { MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 
 @NgModule({
+  exports: [
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    BrowserAnimationsModule,
+    MatIconModule
+  ],
   declarations: [
     AppComponent,
     TableComponent,
-    ViewXmlComponent
+    ViewXmlComponent,
+    RendererComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    AgGridModule.withComponents([]) //The withComponents call is necessary for the grid to be able to use Angular components as cells / headers
+    AgGridModule.withComponents([ RendererComponent ]), //The withComponents call is necessary for the grid to be able to use Angular components as cells / headers
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    BrowserAnimationsModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]

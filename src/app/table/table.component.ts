@@ -160,6 +160,7 @@ export class TableComponent implements OnInit, OnDestroy {
   updateFromDecisionTable() {
     this.updateColumnDefs();
     this.updateCells();
+    this.sizeToFit();
   }
 
 

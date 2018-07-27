@@ -14,6 +14,8 @@ import { RendererComponent } from './renderer/renderer.component';
 import { MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 
+import { FormsModule } from '@angular/forms';
+
 @NgModule({
   exports: [
     MatButtonModule,
@@ -37,7 +39,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatFormFieldModule,
     MatInputModule,
     BrowserAnimationsModule,
-    MatIconModule
+    MatIconModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

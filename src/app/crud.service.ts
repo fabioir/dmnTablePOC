@@ -57,7 +57,35 @@ export class CrudService implements OnInit, OnDestroy {
     this.dataService.setDMN(this.currentDMN);
   }
 
-  updateRow(){}
+  updateRow(rowIndex: number, columnIndex: number, newValue: string){
+    console.log("CRUD Update Row");
+    const rule = this.dataService.dmn.drgElements[0].decisionTable.rule[rowIndex];
+    if(rule.inputEntry.length >= columnIndex){
+      //It is an input value
+      const previousValue = rule.inputEntry[columnIndex - 1].text;
+      if(previousValue === newValue){
+        console.log("Entered the same value");
+        //This return makes possible using tab to navigate across the table without refreshing it
+        return;
+      }else{
+        rule.inputEntry[columnIndex - 1].text = newValue;
+        console.log("Input Updated");
+
+      }
+    }else{
+      //It is an output value
+      const previousValue = rule.outputEntry[columnIndex - 1 - rule.inputEntry.length].text;
+      if(previousValue === newValue){
+        console.log("Entered the same value");
+        //This return makes possible using tab to navigate across the table without refreshing it
+        return;
+      }else{
+        rule.outputEntry[columnIndex - 1 - rule.inputEntry.length].text = newValue;
+        console.log("Input Updated");
+       
+      }
+    }
+  }
 
   deleteRow(){}
 

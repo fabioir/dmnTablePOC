@@ -19,7 +19,7 @@ export class HeaderInputComponent implements OnInit, IHeaderAngularComp {
   
   agInit(params: IHeaderParams){
     this.params = params;
-    console.log(params);
+    //console.log(params);
   }
 
   editInput(){

@@ -96,7 +96,7 @@ export class TableComponent implements OnInit, OnDestroy {
     }
   }
 
-  
+
   /**
    * Adds a new row to the dmn through the dmn service.
    */
@@ -187,9 +187,9 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
 
-/**
- * Manually invoques the dmn service that transforms and stores the current DMN to the XML format
- */
+  /**
+   * Manually invoques the dmn service that transforms and stores the current DMN to the XML format
+   */
   saveToXML() {
     this.dmnService.saveToXML('');
   }
@@ -227,7 +227,7 @@ export class TableComponent implements OnInit, OnDestroy {
     let firstCol = {
       headerName: '', field: '', id: 'overHit', suppressMovable: true, width: 120, suppressResize: true, pinned: 'left',
       children: [
-        { headerName: HP, field: 'number', width: 120, rowDrag: true, suppressResize: true, colId: 'hitPolicy', lockPosition: true, headerComponentFramework: <{new():HeaderHitComponent}>HeaderHitComponent }
+        { headerName: HP, field: 'number', width: 120, rowDrag: true, suppressResize: true, colId: 'hitPolicy', lockPosition: true, headerComponentFramework: <{ new(): HeaderHitComponent }>HeaderHitComponent }
       ]
     };
 
@@ -257,7 +257,7 @@ export class TableComponent implements OnInit, OnDestroy {
     let count = 1;
     if (this.decisionTable) {
       this.decisionTable.input.forEach(input => {
-        columns.push({ headerName: `${input.inputExpression.text} (${input.inputExpression.typeRef})`, field: `iv${count}`, editable: true, colId: `input${count}`, cellRenderer: "renderer",  cellClass: 'input-cell', headerComponentFramework: <{new():HeaderInputComponent}>HeaderInputComponent });
+        columns.push({ headerName: `${input.inputExpression.text} (${input.inputExpression.typeRef})`, field: `iv${count}`, editable: true, colId: `input${count}`, cellRenderer: "renderer", cellClass: 'input-cell', headerComponentFramework: <{ new(): HeaderInputComponent }>HeaderInputComponent });
         //Make sure you know what to put here. Might need to change the Metamodel
         //Let's take care of specification conformance
         count++;
@@ -269,7 +269,7 @@ export class TableComponent implements OnInit, OnDestroy {
       columns.push({ headerName: 'Input Expression 1', field: `iv${count}`, editable: true, colId: 'input1' });
     }
     return {
-      headerName: 'Input', field: '', colId: 'inputs', suppressMovable: true, lockPosition: true, marryChildren: true,  headerGroupComponentFramework: HeaderInputsGroupComponent,
+      headerName: 'Input', field: '', colId: 'inputs', suppressMovable: true, lockPosition: true, marryChildren: true, headerGroupComponentFramework: HeaderInputsGroupComponent,
       children: columns
     };
   }
@@ -284,7 +284,7 @@ export class TableComponent implements OnInit, OnDestroy {
     if (this.decisionTable) {
       this.decisionTable.output.forEach(output => {
         //console.log(output)
-        columns.push({ headerName: `${output.typeRef}`, field: `ov${count}`, editable: true, colId: `output${count}`, cellRenderer: "renderer",  cellClass: 'output-cell', headerComponentFramework: <{new():HeaderOutputComponent}>HeaderOutputComponent });
+        columns.push({ headerName: `${output.typeRef}`, field: `ov${count}`, editable: true, colId: `output${count}`, cellRenderer: "renderer", cellClass: 'output-cell', headerComponentFramework: <{ new(): HeaderOutputComponent }>HeaderOutputComponent });
         count++;
       });
       if (this.decisionTable.output.length === 0) {
@@ -384,15 +384,15 @@ export class TableComponent implements OnInit, OnDestroy {
    * Called without parameters executes the set policy and calls the appropiate function that resizes the grid.
    * @param params 'Autosize' or 'Size to fit' (default)
    */
-  sizePolicy(params){
-    if(params){
-    //console.log(params);
-    this.gridSizePolicy = params.value;
-    this.sizePolicy('');
-    }else{
-      if(this.gridSizePolicy === "Autosize"){
+  sizePolicy(params) {
+    if (params) {
+      //console.log(params);
+      this.gridSizePolicy = params.value;
+      this.sizePolicy('');
+    } else {
+      if (this.gridSizePolicy === "Autosize") {
         this.autoSize();
-      }else{
+      } else {
         this.sizeToFit();
       }
     }
@@ -403,42 +403,32 @@ export class TableComponent implements OnInit, OnDestroy {
    * @param params The edition event triggered by the grid
    */
   onCellEdit(params) {
-    console.log(params);
-    console.log(this.agGrid.columnApi.getAllColumns());
-    console.log(this.dataService.table);
-    let newDecisionTable = this.dataService.table;
 
     //Find out the index of the column
     let col = params.column;
     let columns = this.agGrid.columnApi.getAllColumns();
-    let index;
+    let columnIndex;
 
 
     for (let colIndex = 0; colIndex < columns.length; colIndex++) {
       if (columns[colIndex] === col) {
         console.log('Columns match ' + (params.rowIndex + 1) + ' ' + colIndex);
-        index = colIndex;
+        columnIndex = colIndex;
+        //Call the crud service
+        this.crudService.updateRow(params.rowIndex, columnIndex, params.newValue);
         break;
       }
     }
-    let inputEntryLength = newDecisionTable.rule[params.rowIndex].inputEntry.length;
-    if (inputEntryLength >= (index)) {
 
-      newDecisionTable.rule[params.rowIndex].inputEntry[index - 1].text = params.newValue;
-      this.dataService.setTable(newDecisionTable);
-    } else {
-      newDecisionTable.rule[params.rowIndex].outputEntry[index - 1 - inputEntryLength].text = params.newValue;
-      this.dataService.setTable(newDecisionTable);
-    }
-    //this.dmnService.toDMN(this.dataService.table); => crashes the app
-    this.dmnService.saveToXML('');
+
+
   }
 
   /**
    * Reacts to a Drag and Drop action and performs the necessary changes to the DMN
    * @param params Drag Event
    */
-  onCellDrag(params){
+  onCellDrag(params) {
     console.log("You've dragged and droped");
   }
 

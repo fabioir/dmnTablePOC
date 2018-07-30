@@ -1,1 +1,10 @@
-<button (click)="setPolicy()" mat-button>{{params.displayName}}</button>
+<button mat-button [matMenuTriggerFor]="menu">{{params.displayName}}</button>
+<mat-menu #menu="matMenu">
+    <button (click)="setHitPolicy('UNIQUE')" mat-menu-item>UNIQUE</button>
+    <button (click)="setHitPolicy('ANY')" mat-menu-item>ANY</button>
+    <button (click)="setHitPolicy('PRIORITY')" mat-menu-item>PRIORITY</button>
+    <button (click)="setHitPolicy('FIRST')" mat-menu-item>FIRST</button>
+    <button (click)="setHitPolicy('OUTPUTORDER')" mat-menu-item>OUTPUT ORDER</button>
+    <button (click)="setHitPolicy('RULEORDER')" mat-menu-item>RULE ORDER</button>
+    <button (click)="setHitPolicy('COLLECT')" mat-menu-item>COLLECT</button>
+</mat-menu>

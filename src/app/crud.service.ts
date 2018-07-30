@@ -22,7 +22,7 @@ export class CrudService implements OnInit, OnDestroy {
     private dmnService: DmnService
   ) { }
 
-  ngOnInit(){
+  ngOnInit() {
     console.log("crudInit");
     this.currentDMN = this.dataService.dmn;
     this.dmnSubscription = this.dataService.getDMNUpdates().subscribe(dmn => {
@@ -30,17 +30,17 @@ export class CrudService implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.dmnSubscription.unsubscribe();
   }
 
-  createRow(){
-    
+  createRow() {
+
     //create a dmn:DecisionRule
     //Fill with newly created inputEntries dmn:UnaryTests and outputEntries dmn:LiteralExpression
-    if(!this.currentDMN.drgElements[0].decisionTable.rule){
-     let aux: any = this.currentDMN.drgElements[0].decisionTable;
-     aux.set('rule', []);
+    if (!this.currentDMN.drgElements[0].decisionTable.rule) {
+      let aux: any = this.currentDMN.drgElements[0].decisionTable;
+      aux.set('rule', []);
     }
     console.log(this.currentDMN.drgElements[0].decisionTable);
     this.currentDMN.drgElements[0].decisionTable.rule.push(this.dmnService.newRule());
@@ -48,7 +48,7 @@ export class CrudService implements OnInit, OnDestroy {
     console.log('number of rules: ' + rulesNumber);
 
     //Set the new rule id
-    const newRule: _.DecisionRule = this.currentDMN.drgElements[0].decisionTable.rule[rulesNumber-1];
+    const newRule: _.DecisionRule = this.currentDMN.drgElements[0].decisionTable.rule[rulesNumber - 1];
     newRule.id = `rule${rulesNumber}`;
 
     newRule.inputEntry = this.dmnService.generateRuleInputEntries(newRule.id);
@@ -57,56 +57,74 @@ export class CrudService implements OnInit, OnDestroy {
     this.dataService.setDMN(this.currentDMN);
   }
 
-  updateRow(rowIndex: number, columnIndex: number, newValue: string){
+  updateRow(rowIndex: number, columnIndex: number, newValue: string) {
     console.log("CRUD Update Row");
     const rule = this.dataService.dmn.drgElements[0].decisionTable.rule[rowIndex];
-    if(rule.inputEntry.length >= columnIndex){
+    if (rule.inputEntry.length >= columnIndex) {
       //It is an input value
       const previousValue = rule.inputEntry[columnIndex - 1].text;
-      if(previousValue === newValue){
+      if (previousValue === newValue) {
         console.log("Entered the same value");
         //This return makes possible using tab to navigate across the table without refreshing it
         return;
-      }else{
+      } else {
         rule.inputEntry[columnIndex - 1].text = newValue;
+        //Updating current DMN
+        this.currentDMN.drgElements[0].decisionTable.rule[rowIndex].inputEntry[columnIndex - 1].text = newValue;
         console.log("Input Updated");
 
       }
-    }else{
+    } else {
       //It is an output value
       const previousValue = rule.outputEntry[columnIndex - 1 - rule.inputEntry.length].text;
-      if(previousValue === newValue){
+      if (previousValue === newValue) {
         console.log("Entered the same value");
         //This return makes possible using tab to navigate across the table without refreshing it
         return;
-      }else{
+      } else {
         rule.outputEntry[columnIndex - 1 - rule.inputEntry.length].text = newValue;
+        //Updating current DMN
+        this.currentDMN.drgElements[0].decisionTable.rule[rowIndex].outputEntry[columnIndex - 1 - rule.inputEntry.length].text = newValue;
         console.log("Input Updated");
-       
+
       }
     }
+    this.dataService.setDMN(this.currentDMN);
   }
 
-  deleteRow(){}
+  deleteRow(rowIndex: number) {
+    const newRules = new Array<_.DecisionRule>();
+    let rules = this.currentDMN.drgElements[0].decisionTable.rule;
 
-  createInput(){}
+    for(let i=0; i<rules.length; i++){
+      if(i !== rowIndex){
+        newRules.push(rules[i]);
+      }
+    }
 
-  updateInput(){}
+    this.currentDMN.drgElements[0].decisionTable.rule = newRules;
 
-  deleteInput(){}
+    this.dataService.setDMN(this.currentDMN);
+  }
 
-  createOutput(){}
+  createInput() { }
 
-  updateOutput(){}
+  updateInput() { }
 
-  deleteOutput(){}
+  deleteInput() { }
+
+  createOutput() { }
+
+  updateOutput() { }
+
+  deleteOutput() { }
 
   /**
    * Updates the Hit Policy in the DMN.
    * @param newHitPolicy String specifying the new Hit Policy
    */
-  updateHitPolicy(newHitPolicy: string){
-    this.currentDMN.drgElements[0].decisionTable.hitPolicy = <HitPolicy> newHitPolicy;
+  updateHitPolicy(newHitPolicy: string) {
+    this.currentDMN.drgElements[0].decisionTable.hitPolicy = <HitPolicy>newHitPolicy;
     this.dataService.setDMN(this.currentDMN);
   }
 }

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ICellRendererAngularComp } from "ag-grid-angular";
 
+import { CrudService } from '../crud.service';
+
 @Component({
   selector: 'app-renderer',
   templateUrl: './renderer.component.html',
@@ -11,7 +13,9 @@ export class RendererComponent implements OnInit, ICellRendererAngularComp {
   params;
   text;
   class;
-  constructor() { }
+  constructor(
+    private crudService: CrudService
+  ) { }
 
   ngOnInit() {
   }
@@ -33,12 +37,13 @@ export class RendererComponent implements OnInit, ICellRendererAngularComp {
     this.setValue("Edited");
   }
 
-  deleteRow(){
-    console.log("Delete Row");
-    console.log(this.params);
+  deleteRow() {
+    //console.log("Delete Row");
+    //console.log(this.params);
+    this.crudService.deleteRow(this.params.rowIndex);
   }
 
-  deleteColumn(){
+  deleteColumn() {
     console.log("Delete Column");
     console.log(this.params);
   }

@@ -419,9 +419,6 @@ export class TableComponent implements OnInit, OnDestroy {
         break;
       }
     }
-
-
-
   }
 
   /**

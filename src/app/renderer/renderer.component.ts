@@ -33,6 +33,16 @@ export class RendererComponent implements OnInit, ICellRendererAngularComp {
     this.setValue("Edited");
   }
 
+  deleteRow(){
+    console.log("Delete Row");
+    console.log(this.params);
+  }
+
+  deleteColumn(){
+    console.log("Delete Column");
+    console.log(this.params);
+  }
+
   setValue(value: string) {
     this.params.setValue(value);
   }

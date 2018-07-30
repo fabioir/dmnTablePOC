@@ -424,4 +424,12 @@ export class TableComponent implements OnInit, OnDestroy {
     this.dmnService.saveToXML('');
   }
 
+  /**
+   * Reacts to a Drag and Drop action and performs the necessary changes to the DMN
+   * @param params Drag Event
+   */
+  onCellDrag(params){
+    console.log("You've dragged and droped");
+  }
+
 }

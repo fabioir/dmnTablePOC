@@ -13,6 +13,10 @@ import { equalParamsAndUrlSegments } from '../../../node_modules/@angular/router
 import { RendererComponent } from '../renderer/renderer.component';
 import { HeaderInputComponent } from '../header-input/header-input.component';
 import { HeaderOutputComponent } from '../header-output/header-output.component';
+import { HeaderHitComponent } from '../header-hit/header-hit.component';
+import { HeaderOutputsGroupComponent } from '../header-outputs-group/header-outputs-group.component';
+import { HeaderInputsGroupComponent } from '../header-inputs-group/header-inputs-group.component';
+import { HeaderInformationItemGroupComponent } from '../header-information-item-group/header-information-item-group.component';
 
 @Component({
   selector: 'app-table',
@@ -33,7 +37,11 @@ export class TableComponent implements OnInit, OnDestroy {
   private frameworkComponents = {
     renderer: RendererComponent,
     headerInput: HeaderInputComponent,
-    headerOutput: HeaderOutputComponent
+    headerOutput: HeaderOutputComponent,
+    headerOutputsGroup: HeaderOutputsGroupComponent,
+    headerInputsGroup: HeaderInputsGroupComponent,
+    headerHit: HeaderHitComponent,
+    headerInformationItem: HeaderInformationItemGroupComponent
   };
 
   constructor(
@@ -78,6 +86,7 @@ export class TableComponent implements OnInit, OnDestroy {
     //console.log(rowData);
     let lastRow = rowData[rowData.length - 1];
     if (lastRow.data.number === params.data.number) {
+      console.log(params);
       this.addRow();
       //console.log("Last row clicked");
     }
@@ -223,7 +232,7 @@ export class TableComponent implements OnInit, OnDestroy {
     let firstCol = {
       headerName: '', field: '', id: 'overHit', suppressMovable: true, width: 120, suppressResize: true, pinned: 'left',
       children: [
-        { headerName: HP, field: 'number', width: 120, rowDrag: true, suppressResize: true, colId: 'hitPolicy', lockPosition: true }
+        { headerName: HP, field: 'number', width: 120, rowDrag: true, suppressResize: true, colId: 'hitPolicy', lockPosition: true, headerComponentFramework: <{new():HeaderHitComponent}>HeaderHitComponent }
       ]
     };
 
@@ -236,7 +245,7 @@ export class TableComponent implements OnInit, OnDestroy {
     //Assembling all the columns together
     let columnDefs = [
       {
-        headerName: ITN, field: 'infItemName', pinned: 'left', colId: 'decisionName',
+        headerName: ITN, field: 'infItemName', pinned: 'left', colId: 'decisionName', headerGroupComponentFramework: HeaderInformationItemGroupComponent,
         children: [firstCol, inputColumns, outputColumns]
       }];
 
@@ -265,7 +274,7 @@ export class TableComponent implements OnInit, OnDestroy {
       columns.push({ headerName: 'Input Expression 1', field: `iv${count}`, editable: true, colId: 'input1' });
     }
     return {
-      headerName: 'Input', field: '', colId: 'inputs', suppressMovable: true, lockPosition: true, marryChildren: true,
+      headerName: 'Input', field: '', colId: 'inputs', suppressMovable: true, lockPosition: true, marryChildren: true,  headerGroupComponentFramework: HeaderInputsGroupComponent,
       children: columns
     };
   }
@@ -290,7 +299,7 @@ export class TableComponent implements OnInit, OnDestroy {
       columns.push({ headerName: 'Output Expression 1', field: `ov${count}`, editable: true, colId: 'output1' });
     }
     return {
-      headerName: 'Output', field: '', colId: 'outputs', suppressMovable: true, lockPosition: true, marryChildren: true,
+      headerName: 'Output', field: '', colId: 'outputs', suppressMovable: true, lockPosition: true, marryChildren: true, headerGroupComponentFramework: HeaderOutputsGroupComponent,
       children: columns
     };
   }

@@ -17,6 +17,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { HeaderInputComponent } from './header-input/header-input.component';
 import { HeaderOutputComponent } from './header-output/header-output.component';
+import { HeaderOutputsGroupComponent } from './header-outputs-group/header-outputs-group.component';
+import { HeaderInputsGroupComponent } from './header-inputs-group/header-inputs-group.component';
+import { HeaderHitComponent } from './header-hit/header-hit.component';
+import { HeaderInformationItemGroupComponent } from './header-information-item-group/header-information-item-group.component';
 
 @NgModule({
   exports: [
@@ -35,13 +39,17 @@ import { HeaderOutputComponent } from './header-output/header-output.component';
     ViewXmlComponent,
     RendererComponent,
     HeaderInputComponent,
-    HeaderOutputComponent
+    HeaderOutputComponent,
+    HeaderOutputsGroupComponent,
+    HeaderInputsGroupComponent,
+    HeaderHitComponent,
+    HeaderInformationItemGroupComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    AgGridModule.withComponents([ RendererComponent, HeaderInputComponent, HeaderOutputComponent ]), //The withComponents call is necessary for the grid to be able to use Angular components as cells / headers
+    AgGridModule.withComponents([ RendererComponent, HeaderInputComponent, HeaderOutputComponent, HeaderOutputsGroupComponent, HeaderInputsGroupComponent, HeaderHitComponent, HeaderInformationItemGroupComponent ]), //The withComponents call is necessary for the grid to be able to use Angular components as cells / headers
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,

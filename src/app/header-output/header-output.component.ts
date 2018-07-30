@@ -10,7 +10,7 @@ import {IHeaderAngularComp} from "ag-grid-angular/main";
 })
 export class HeaderOutputComponent implements OnInit, IHeaderAngularComp {
 
-  params: IHeaderParams;
+  public params: IHeaderParams;
 
   constructor() { }
 

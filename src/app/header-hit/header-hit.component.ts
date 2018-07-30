@@ -4,11 +4,11 @@ import {IHeaderParams} from "ag-grid/main";
 import {IHeaderAngularComp} from "ag-grid-angular/main";
 
 @Component({
-  selector: 'app-header-input',
-  templateUrl: './header-input.component.html',
-  styleUrls: ['./header-input.component.css']
+  selector: 'app-header-hit',
+  templateUrl: './header-hit.component.html',
+  styleUrls: ['./header-hit.component.css']
 })
-export class HeaderInputComponent implements OnInit, IHeaderAngularComp {
+export class HeaderHitComponent implements OnInit, IHeaderAngularComp {
 
   public params: IHeaderParams;
 
@@ -16,14 +16,13 @@ export class HeaderInputComponent implements OnInit, IHeaderAngularComp {
 
   ngOnInit() {
   }
-  
+
   agInit(params: IHeaderParams){
     this.params = params;
-    console.log(params);
   }
 
-  editInput(){
-    console.log("This should deploy input edit options");
+  setPolicy(){
+    console.log("Here we should set the new HIT policy");
   }
 
 }

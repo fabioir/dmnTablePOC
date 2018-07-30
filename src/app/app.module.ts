@@ -15,6 +15,8 @@ import { MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule, Mat
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 
 import { FormsModule } from '@angular/forms';
+import { HeaderInputComponent } from './header-input/header-input.component';
+import { HeaderOutputComponent } from './header-output/header-output.component';
 
 @NgModule({
   exports: [
@@ -31,13 +33,15 @@ import { FormsModule } from '@angular/forms';
     AppComponent,
     TableComponent,
     ViewXmlComponent,
-    RendererComponent
+    RendererComponent,
+    HeaderInputComponent,
+    HeaderOutputComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    AgGridModule.withComponents([ RendererComponent ]), //The withComponents call is necessary for the grid to be able to use Angular components as cells / headers
+    AgGridModule.withComponents([ RendererComponent, HeaderInputComponent, HeaderOutputComponent ]), //The withComponents call is necessary for the grid to be able to use Angular components as cells / headers
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,

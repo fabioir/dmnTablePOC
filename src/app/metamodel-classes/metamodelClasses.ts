@@ -59,6 +59,9 @@ export class DecisionRule {
     inputEntry: Array<UnaryTests> = [];//UnaryTest[0..*]
     outputEntry: Array<LiteralExpression> = [];//LiteralExpression[1..*]
 
+    //Extra
+    id: string;
+
     clone(rule: DecisionRule) {
 
         rule.inputEntry.forEach(inputEntry => {
@@ -88,6 +91,9 @@ export class LiteralExpression {
     expressionLanguage: string;     //Expressed in URI format [0..1]
     importedValues: ImportedValues;         //[0..1]
 
+    //Extra
+    id: string;
+    
     constructor() {
         this.text = '';
         this.expressionLanguage = '';

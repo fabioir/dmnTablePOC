@@ -246,24 +246,24 @@ export class DmnService implements OnInit, OnDestroy {
   /**
    * Adds a new rule to the DMN (doesn't work from the columns but from another rule)
    */
-  newRule(rule: _.DecisionRule): any {
+  newRule(): any {
     let newRule = this.dmn.create('dmn:DecisionRule');
     newRule.set('id', '');
     newRule.set('description', '');
 
     let inputEntries = [];
-    rule.inputEntry.forEach(inputEntry => {
+    /*rule.inputEntry.forEach(inputEntry => {
       let newInputEntry = this.dmn.create('dmn:UnaryTests');
       newInputEntry.set('expressionLanguage', inputEntry.expressionLanguage);
       newInputEntry.set('text', inputEntry.text);
 
       inputEntries.push(newInputEntry);
 
-    });
+    });*/
     newRule.set('inputEntry', inputEntries);
 
     let outputEntries = [];
-    rule.outputEntry.forEach(outputEntry => {
+    /*rule.outputEntry.forEach(outputEntry => {
       let newOutputEntry = this.dmn.create('dmn:LiteralExpression');
 
       newOutputEntry.set('text', outputEntry.text);
@@ -278,9 +278,45 @@ export class DmnService implements OnInit, OnDestroy {
       }
 
       outputEntries.push(newOutputEntry);
-    });
+    });*/
     newRule.set('outputEntry', outputEntries);
 
     return newRule;
   }
+
+  generateRuleInputEntries(ruleId: string): Array<_.UnaryTests> {
+    const result = new Array<_.UnaryTests>();
+
+    const inputs = this.dataService.dmn.drgElements[0].decisionTable.input;
+    let count = 1;
+    inputs.forEach(input => {
+      let inputEntry = this.dmn.create('dmn:UnaryTests');
+
+      inputEntry.set('id', `${ruleId}input${count}`);
+      inputEntry.set('text', '-');
+
+      result.push(inputEntry);
+      count++;
+    });
+
+    return result;
+  }
+
+  generateRuleOutputEntries(ruleId: string): Array<_.LiteralExpression> {
+    const result = new Array<_.LiteralExpression>();
+
+    const outputs = this.dataService.dmn.drgElements[0].decisionTable.output;
+    let count = 1;
+    outputs.forEach(output => {
+      let outputEntry = this.dmn.create('dmn:LiteralExpression');
+
+      outputEntry.set('id', `${ruleId}output${count}`);
+      outputEntry.set('text', '-');
+
+      result.push(outputEntry);
+    });
+
+    return result;
+  }
+
 }

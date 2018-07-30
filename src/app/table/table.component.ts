@@ -18,6 +18,8 @@ import { HeaderOutputsGroupComponent } from '../header-outputs-group/header-outp
 import { HeaderInputsGroupComponent } from '../header-inputs-group/header-inputs-group.component';
 import { HeaderInformationItemGroupComponent } from '../header-information-item-group/header-information-item-group.component';
 
+import { CrudService } from '../crud.service';
+
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
@@ -32,7 +34,7 @@ export class TableComponent implements OnInit, OnDestroy {
   xmlSubscription: Subscription;
   xml;
   url;
-  gridSizePolicy = "Size to fit";
+  gridSizePolicy = "Autosize";
 
   private frameworkComponents = {
     renderer: RendererComponent,
@@ -47,7 +49,8 @@ export class TableComponent implements OnInit, OnDestroy {
   constructor(
     private dmnService: DmnService,
     private http: HttpClient,
-    private dataService: DataService
+    private dataService: DataService,
+    private crudService: CrudService
   ) { }
 
   /**
@@ -57,6 +60,7 @@ export class TableComponent implements OnInit, OnDestroy {
     this.dmnService.defaultStart(); //Import default table
     this.keepTableUpdated(); //Subscribe to table changes
     this.keepXMLUpdated();
+    this.crudService.ngOnInit();//Otherwise it doesn't initialize
   }
 
   /**
@@ -97,16 +101,7 @@ export class TableComponent implements OnInit, OnDestroy {
    * Adds a new row to the dmn through the dmn service.
    */
   addRow() {
-    let rule = this.decisionTable.rule[0];
-    const newRule = new _.DecisionRule();
-    newRule.clone(rule);
-
-    newRule.inputEntry.forEach(input => { input.text = '-' });
-    newRule.outputEntry.forEach(output => { output.text = '-' });
-    console.log(this.decisionTable)
-    this.decisionTable.rule.push(this.dmnService.newRule(newRule));
-    //console.log();
-    this.dataService.setTable(this.decisionTable);
+    this.crudService.createRow();
   }
 
   /**
@@ -355,6 +350,8 @@ export class TableComponent implements OnInit, OnDestroy {
    * Generates and downloads a .dmn text file
    */
   downloadDMN() {
+    //First we save the dmn to XML to ensure it is updated
+    this.saveToXML();
     var pom = document.createElement('a');
     var filename = "file.dmn";
     let blob = new Blob([this.xml], { type: 'text/plain' });

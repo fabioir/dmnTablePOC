@@ -6,6 +6,7 @@ import {IHeaderAngularComp} from "ag-grid-angular/main";
 import { HitPolicy, ReverseHitPolicy, Definitions } from '../metamodel-classes/metamodelClasses';
 
 import { DataService } from '../data.service';
+import { CrudService } from '../crud.service';
 
 @Component({
   selector: 'app-header-hit',
@@ -17,7 +18,7 @@ export class HeaderHitComponent implements OnInit, IHeaderAngularComp {
   public params: IHeaderParams;
   public dmn: Definitions;
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService,private crudService: CrudService) { }
 
   ngOnInit() {
   }
@@ -27,13 +28,15 @@ export class HeaderHitComponent implements OnInit, IHeaderAngularComp {
   }
 
   setHitPolicy(policy: string){
-    console.log(policy);
+    /*console.log(policy);
     console.log(ReverseHitPolicy[policy]);
     const reverse = ReverseHitPolicy[policy];
     this.dmn = this.dataService.dmn;
     this.dmn.drgElements[0].decisionTable.hitPolicy = <HitPolicy>policy;
 
-    this.dataService.setDMN(this.dmn);
+    this.dataService.setDMN(this.dmn);*/
+
+    this.crudService.updateHitPolicy(policy);
   }
 
 }

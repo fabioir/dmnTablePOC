@@ -312,10 +312,10 @@ export class DmnService implements OnInit, OnDestroy {
 
       outputEntry.set('id', `${ruleId}output${count}`);
       outputEntry.set('text', '-');
-
       result.push(outputEntry);
+      count++;
     });
-
+    console.log(result);
     return result;
   }
 

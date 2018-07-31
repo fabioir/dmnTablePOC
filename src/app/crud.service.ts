@@ -42,10 +42,10 @@ export class CrudService implements OnInit, OnDestroy {
       let aux: any = this.currentDMN.drgElements[0].decisionTable;
       aux.set('rule', []);
     }
-    console.log(this.currentDMN.drgElements[0].decisionTable);
+    //console.log(this.currentDMN.drgElements[0].decisionTable);
     this.currentDMN.drgElements[0].decisionTable.rule.push(this.dmnService.newRule());
     const rulesNumber = this.currentDMN.drgElements[0].decisionTable.rule.length;
-    console.log('number of rules: ' + rulesNumber);
+    //console.log('number of rules: ' + rulesNumber);
 
     //Set the new rule id
     const newRule: _.DecisionRule = this.currentDMN.drgElements[0].decisionTable.rule[rulesNumber - 1];
@@ -72,7 +72,7 @@ export class CrudService implements OnInit, OnDestroy {
         //Updating current DMN
         this.currentDMN.drgElements[0].decisionTable.rule[rowIndex].inputEntry[columnIndex - 1].text = newValue;
         console.log("Input Updated");
-
+        console.log(this.currentDMN);
       }
     } else {
       //It is an output value
@@ -107,13 +107,59 @@ export class CrudService implements OnInit, OnDestroy {
     this.dataService.setDMN(this.currentDMN);
   }
 
-  createInput() { }
+  createInput() { 
+    //Needed to add to the table inputs
+    const inputClause : _.InputClause = this.dmnService.newInput();
+    //Needed to add to every rule inputs
+    let inputEntry: _.UnaryTests;
+
+    const inputNumber = this.currentDMN.drgElements[0].decisionTable.input.length + 1;
+
+    inputClause.id = `input${inputNumber}`;
+    inputClause.inputExpression.typeRef = _.QName.string;
+    inputClause.inputExpression.id = `inputExpression${inputNumber}`;
+
+    //We push the inputClause to the table inputs
+    this.currentDMN.drgElements[0].decisionTable.input.push(inputClause);
+
+    //We introduce a new input entry for each rule with its own id for each rule
+    this.currentDMN.drgElements[0].decisionTable.rule.forEach(rule => {
+      inputEntry = this.dmnService.newInputEntry();
+      inputEntry.id = `${rule.id}input${inputNumber}`;
+      rule.inputEntry.push(inputEntry);
+    });
+    
+    this.dataService.setDMN(this.currentDMN);
+
+  }
 
   updateInput() { }
 
   deleteInput() { }
 
-  createOutput() { }
+  createOutput() {
+    //Needed to add to the table outputs
+    const outputClause: _.OutputClause = this.dmnService.newOutput();
+    //Needed to add to each rule outputs
+    let outputEntry: _.LiteralExpression;
+
+    //Lets find out the output number
+    const outputNumber = this.currentDMN.drgElements[0].decisionTable.output.length + 1;
+
+    outputClause.id = `output${outputNumber}`;
+    outputClause.typeRef = _.QName.string;
+
+    //We push the Output Clause into the table outputs Array
+    this.currentDMN.drgElements[0].decisionTable.output.push(outputClause);
+
+    this.currentDMN.drgElements[0].decisionTable.rule.forEach(rule => {
+      outputEntry = this.dmnService.newOutputEntry();
+      outputEntry.id = `${rule.id}output${outputNumber}`;
+      rule.outputEntry.push(outputEntry);
+    });
+
+    this.dataService.setDMN(this.currentDMN);
+   }
 
   updateOutput() { }
 

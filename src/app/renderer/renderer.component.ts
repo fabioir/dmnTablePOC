@@ -33,8 +33,25 @@ export class RendererComponent implements OnInit, ICellRendererAngularComp {
 
   edition() {
     console.log("button edition triggered");
-    console.log(this.params)
+    console.log(this.params);
+    console.log("Setting value from the renderer");
     this.setValue("Edited");
+    /*
+//get column number
+const column = this.params.column;
+const allColumns = this.params.column.parent.children;
+let columnIndex;
+
+for(let index = 0; index < allColumns.length; index++){
+  if(allColumns[index] === column){
+    columnIndex = index;
+  }
+  
+}
+
+console.log(allColumns);
+
+    this.crudService.updateRow(this.params.rowIndex,columnIndex + 1,"Edited");*/
   }
 
   deleteRow() {

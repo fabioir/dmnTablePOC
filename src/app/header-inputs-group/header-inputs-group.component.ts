@@ -23,7 +23,7 @@ export class HeaderInputsGroupComponent implements OnInit, IHeaderGroupAngularCo
 
   agInit(params: IHeaderGroupParams){
     this.params = params;
-    console.log(params);
+    //console.log(params);
   }
 
   newInput(){

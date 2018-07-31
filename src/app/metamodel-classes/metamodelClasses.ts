@@ -44,8 +44,11 @@ export class DecisionTable {
 }
 
 export class InputClause {
-    inputExpression: Expression;//Expression[0..1]
+    inputExpression: LiteralExpression;//Expression[0..1]
     inputEntry: Expression;//Expression[*]
+
+    //Extra
+    id: string;
 }
 
 export class OutputClause {
@@ -53,6 +56,9 @@ export class OutputClause {
     name: string; //string[0..1]
     outputEntry: Expression; //Expression[*]
     defaultOutputEntry: Expression; //Expression[0..1]
+
+    //Extra
+    id: string;
 }
 
 export class DecisionRule {
@@ -90,10 +96,10 @@ export class LiteralExpression {
     text: string;                   //[0..1]
     expressionLanguage: string;     //Expressed in URI format [0..1]
     importedValues: ImportedValues;         //[0..1]
-
+    typeRef: QName;
     //Extra
     id: string;
-    
+
     constructor() {
         this.text = '';
         this.expressionLanguage = '';
@@ -138,7 +144,7 @@ export class UnaryTests {
 
     //extra
     id: string;
-    
+
     clone(unaryTests: UnaryTests) {
         this.expressionLanguage = unaryTests.expressionLanguage;
         this.text = unaryTests.text;

@@ -90,7 +90,7 @@ export class TableComponent implements OnInit, OnDestroy {
     //console.log(rowData);
     let lastRow = rowData[rowData.length - 1];
     if (lastRow.data.number === params.data.number) {
-      console.log(params);
+      //console.log(params);
       this.addRow();
       //console.log("Last row clicked");
     }
@@ -108,6 +108,9 @@ export class TableComponent implements OnInit, OnDestroy {
    * Adds a new input to the dmn through the dmn service.
    */
   addInput() {
+
+    this.crudService.createInput();
+/*
     this.decisionTable.newInput(this.dmnService.newInput());
 
     if (this.decisionTable.rule) {
@@ -118,13 +121,16 @@ export class TableComponent implements OnInit, OnDestroy {
 
     let columnDefs = this.agGrid.columnApi.getAllColumns();
     console.log(this.decisionTable.rule);
-    //this.agGrid.api.setColumnDefs(columnDefs);
+    //this.agGrid.api.setColumnDefs(columnDefs);*/
   }
 
   /**
    * Adds a new output to the dmn through the dmn service.
    */
   addOutput() {
+
+    this.crudService.createOutput();
+    /*
     this.decisionTable.newOutput(this.dmnService.newOutput());
 
     if (this.decisionTable.rule) {
@@ -132,6 +138,7 @@ export class TableComponent implements OnInit, OnDestroy {
     }
 
     this.updateFromDecisionTable();
+    */
   }
 
   /**
@@ -246,7 +253,7 @@ export class TableComponent implements OnInit, OnDestroy {
 
     //Setting columns to the grid (When in edition step we'll have to check synchro among displayed and stored table)
     this.agGrid.api.setColumnDefs(columnDefs);
-    console.log(this.agGrid.columnApi.getAllColumns());
+    //console.log(this.agGrid.columnApi.getAllColumns());
   }
 
   /**
@@ -403,19 +410,16 @@ export class TableComponent implements OnInit, OnDestroy {
    * @param params The edition event triggered by the grid
    */
   onCellEdit(params) {
-
     //Find out the index of the column
     let col = params.column;
     let columns = this.agGrid.columnApi.getAllColumns();
-    let columnIndex;
-
 
     for (let colIndex = 0; colIndex < columns.length; colIndex++) {
       if (columns[colIndex] === col) {
         console.log('Columns match ' + (params.rowIndex + 1) + ' ' + colIndex);
-        columnIndex = colIndex;
+        
         //Call the crud service
-        this.crudService.updateRow(params.rowIndex, columnIndex, params.newValue);
+        this.crudService.updateRow(params.rowIndex, colIndex, params.newValue);
         break;
       }
     }

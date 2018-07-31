@@ -19,7 +19,7 @@ export class HeaderOutputsGroupComponent implements OnInit, IHeaderGroupAngularC
 
   agInit(params: IHeaderGroupParams){
     this.params = params;
-    console.log(params);
+    //console.log(params);
   } 
  
   newOutput(){

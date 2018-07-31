@@ -135,7 +135,36 @@ export class CrudService implements OnInit, OnDestroy {
 
   updateInput() { }
 
-  deleteInput() { }
+  deleteInput(colNumber: number) { 
+    console.log("deleting input column " + colNumber);
+
+    const auxInputs = new Array<_.InputClause>();
+    let inputs = this.currentDMN.drgElements[0].decisionTable.input;
+    //Delete the input from the dec table
+    for(let i=0; i<inputs.length; i++){
+      if(i!==colNumber){
+        auxInputs.push(inputs[i]);
+      }
+    }
+    this.currentDMN.drgElements[0].decisionTable.input = auxInputs;
+
+    //Now lets delete it from each rule
+    this.currentDMN.drgElements[0].decisionTable.rule.forEach(rule => {
+      const auxInputEntries = new Array<_.UnaryTests>();
+      let inputEntries = rule.inputEntry;
+
+      for(let i=0; i<inputEntries.length; i++){
+        if(i !== colNumber){
+          auxInputEntries.push(inputEntries[i]);
+        }
+      }
+      rule.inputEntry = auxInputEntries;
+    });
+
+    this.dataService.setDMN(this.currentDMN);
+
+    //reasign ids... May not be relevant ?
+  }
 
   createOutput() {
     //Needed to add to the table outputs
@@ -163,7 +192,37 @@ export class CrudService implements OnInit, OnDestroy {
 
   updateOutput() { }
 
-  deleteOutput() { }
+  deleteOutput(colNumber: number) {
+    console.log("deleting output column " + colNumber);
+
+    const auxOutputs = new Array<_.OutputClause>();
+    let outputs = this.currentDMN.drgElements[0].decisionTable.output;
+    //Delete the input from the dec table
+    for(let i=0; i<outputs.length; i++){
+      if(i!==colNumber){
+        auxOutputs.push(outputs[i]);
+      }
+    }
+    this.currentDMN.drgElements[0].decisionTable.output = auxOutputs;
+
+    //Now lets delete it from each rule
+    this.currentDMN.drgElements[0].decisionTable.rule.forEach(rule => {
+      const auxOutputEntries = new Array<_.LiteralExpression>();
+      let outputEntries = rule.outputEntry;
+
+      for(let i=0; i<outputEntries.length; i++){
+        if(i !== colNumber){
+          auxOutputEntries.push(outputEntries[i]);
+        }
+      }
+      rule.outputEntry = auxOutputEntries;
+    });
+
+    //reasign ids... May not be relevant ?
+    
+    this.dataService.setDMN(this.currentDMN);
+
+   }
 
   /**
    * Updates the Hit Policy in the DMN.
@@ -173,4 +232,6 @@ export class CrudService implements OnInit, OnDestroy {
     this.currentDMN.drgElements[0].decisionTable.hitPolicy = <HitPolicy>newHitPolicy;
     this.dataService.setDMN(this.currentDMN);
   }
+
+
 }

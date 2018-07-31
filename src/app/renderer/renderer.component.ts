@@ -61,8 +61,35 @@ console.log(allColumns);
   }
 
   deleteColumn() {
-    console.log("Delete Column");
-    console.log(this.params);
+    
+    const column = this.params.column;
+    const allColumns = this.params.column.parent.children;
+    let columnIndex;
+
+    for (let index = 0; index < allColumns.length; index++) {
+      if (allColumns[index] === column) {
+        columnIndex = index;
+      }
+
+    }
+    const inOrOut = column.parent.originalColumnGroup.colGroupDef.headerName;
+
+    if(inOrOut === 'Input'){}
+    
+    switch(inOrOut){
+      case 'Input':
+      this.crudService.deleteInput(columnIndex);
+      break;
+
+      case 'Output':
+      this.crudService.deleteOutput(columnIndex);
+      break;
+
+      default:
+      break;
+    }
+    
+
   }
 
   setValue(value: string) {

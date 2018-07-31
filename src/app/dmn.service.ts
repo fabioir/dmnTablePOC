@@ -315,7 +315,6 @@ export class DmnService implements OnInit, OnDestroy {
       result.push(outputEntry);
       count++;
     });
-    console.log(result);
     return result;
   }
 

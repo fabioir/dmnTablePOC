@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import {IHeaderGroupParams} from "ag-grid/main";
 import {IHeaderGroupAngularComp} from "ag-grid-angular/main";
 
+import { CrudService } from '../crud.service';
+
 @Component({
   selector: 'app-header-outputs-group',
   templateUrl: './header-outputs-group.component.html',
@@ -12,7 +14,9 @@ export class HeaderOutputsGroupComponent implements OnInit, IHeaderGroupAngularC
 
   public params: IHeaderGroupParams;
 
-  constructor() { }
+  constructor(
+    private crudService: CrudService
+  ) { }
 
   ngOnInit() {
   }
@@ -23,8 +27,7 @@ export class HeaderOutputsGroupComponent implements OnInit, IHeaderGroupAngularC
   } 
  
   newOutput(){
-    console.log("New output");
-    //this.tableComponent.addInput();
+    this.crudService.createOutput();
   }
 
 }

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import {IHeaderGroupParams} from "ag-grid/main";
 import {IHeaderGroupAngularComp} from "ag-grid-angular/main";
 
-import { TableComponent } from '../table/table.component';
+import { CrudService } from '../crud.service';
 
 @Component({
   selector: 'app-header-inputs-group',
@@ -15,7 +15,7 @@ export class HeaderInputsGroupComponent implements OnInit, IHeaderGroupAngularCo
   public params: IHeaderGroupParams;
 
   constructor(
-    //private tableComponent: TableComponent
+    private crudService: CrudService
   ) { }
 
   ngOnInit() {
@@ -27,8 +27,7 @@ export class HeaderInputsGroupComponent implements OnInit, IHeaderGroupAngularCo
   }
 
   newInput(){
-    console.log("New input");
-    //this.tableComponent.addInput();
+    this.crudService.createInput();
   }
 
 }

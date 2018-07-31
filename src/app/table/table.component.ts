@@ -268,7 +268,7 @@ export class TableComponent implements OnInit, OnDestroy {
     let count = 1;
     if (this.decisionTable) {
       this.decisionTable.input.forEach(input => {
-        columns.push({ headerName: `${input.inputExpression.text} (${input.inputExpression.typeRef})`, field: `iv${count}`, editable: true, colId: `input${count}`, cellRenderer: "renderer", cellClass: 'input-cell', headerComponentFramework: <{ new(): HeaderInputComponent }>HeaderInputComponent });
+        columns.push({ headerName: `${input.inputExpression.text} (${input.inputExpression.typeRef})`, field: `iv${count}`, editable: true, colId: `input${count}`, cellClass: 'input-cell', headerComponentFramework: <{ new(): HeaderInputComponent }>HeaderInputComponent });
         //Make sure you know what to put here. Might need to change the Metamodel
         //Let's take care of specification conformance
         count++;
@@ -295,7 +295,7 @@ export class TableComponent implements OnInit, OnDestroy {
     if (this.decisionTable) {
       this.decisionTable.output.forEach(output => {
         //console.log(output)
-        columns.push({ headerName: `${output.typeRef}`, field: `ov${count}`, editable: true, colId: `output${count}`, cellRenderer: "renderer", cellClass: 'output-cell', headerComponentFramework: <{ new(): HeaderOutputComponent }>HeaderOutputComponent });
+        columns.push({ headerName: `${output.typeRef}`, field: `ov${count}`, editable: true, colId: `output${count}`, cellClass: 'output-cell', headerComponentFramework: <{ new(): HeaderOutputComponent }>HeaderOutputComponent });
         count++;
       });
       if (this.decisionTable.output.length === 0) {

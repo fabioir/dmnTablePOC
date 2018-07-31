@@ -96,8 +96,8 @@ export class CrudService implements OnInit, OnDestroy {
     const newRules = new Array<_.DecisionRule>();
     let rules = this.currentDMN.drgElements[0].decisionTable.rule;
 
-    for(let i=0; i<rules.length; i++){
-      if(i !== rowIndex){
+    for (let i = 0; i < rules.length; i++) {
+      if (i !== rowIndex) {
         newRules.push(rules[i]);
       }
     }
@@ -107,9 +107,9 @@ export class CrudService implements OnInit, OnDestroy {
     this.dataService.setDMN(this.currentDMN);
   }
 
-  createInput() { 
+  createInput() {
     //Needed to add to the table inputs
-    const inputClause : _.InputClause = this.dmnService.newInput();
+    const inputClause: _.InputClause = this.dmnService.newInput();
     //Needed to add to every rule inputs
     let inputEntry: _.UnaryTests;
 
@@ -128,21 +128,21 @@ export class CrudService implements OnInit, OnDestroy {
       inputEntry.id = `${rule.id}input${inputNumber}`;
       rule.inputEntry.push(inputEntry);
     });
-    
+
     this.dataService.setDMN(this.currentDMN);
 
   }
 
   updateInput() { }
 
-  deleteInput(colNumber: number) { 
+  deleteInput(colNumber: number) {
     console.log("deleting input column " + colNumber);
 
     const auxInputs = new Array<_.InputClause>();
     let inputs = this.currentDMN.drgElements[0].decisionTable.input;
     //Delete the input from the dec table
-    for(let i=0; i<inputs.length; i++){
-      if(i!==colNumber){
+    for (let i = 0; i < inputs.length; i++) {
+      if (i !== colNumber) {
         auxInputs.push(inputs[i]);
       }
     }
@@ -153,8 +153,8 @@ export class CrudService implements OnInit, OnDestroy {
       const auxInputEntries = new Array<_.UnaryTests>();
       let inputEntries = rule.inputEntry;
 
-      for(let i=0; i<inputEntries.length; i++){
-        if(i !== colNumber){
+      for (let i = 0; i < inputEntries.length; i++) {
+        if (i !== colNumber) {
           auxInputEntries.push(inputEntries[i]);
         }
       }
@@ -188,7 +188,7 @@ export class CrudService implements OnInit, OnDestroy {
     });
 
     this.dataService.setDMN(this.currentDMN);
-   }
+  }
 
   updateOutput() { }
 
@@ -198,8 +198,8 @@ export class CrudService implements OnInit, OnDestroy {
     const auxOutputs = new Array<_.OutputClause>();
     let outputs = this.currentDMN.drgElements[0].decisionTable.output;
     //Delete the input from the dec table
-    for(let i=0; i<outputs.length; i++){
-      if(i!==colNumber){
+    for (let i = 0; i < outputs.length; i++) {
+      if (i !== colNumber) {
         auxOutputs.push(outputs[i]);
       }
     }
@@ -210,8 +210,8 @@ export class CrudService implements OnInit, OnDestroy {
       const auxOutputEntries = new Array<_.LiteralExpression>();
       let outputEntries = rule.outputEntry;
 
-      for(let i=0; i<outputEntries.length; i++){
-        if(i !== colNumber){
+      for (let i = 0; i < outputEntries.length; i++) {
+        if (i !== colNumber) {
           auxOutputEntries.push(outputEntries[i]);
         }
       }
@@ -219,10 +219,10 @@ export class CrudService implements OnInit, OnDestroy {
     });
 
     //reasign ids... May not be relevant ?
-    
+
     this.dataService.setDMN(this.currentDMN);
 
-   }
+  }
 
   /**
    * Updates the Hit Policy in the DMN.
@@ -233,5 +233,17 @@ export class CrudService implements OnInit, OnDestroy {
     this.dataService.setDMN(this.currentDMN);
   }
 
+  reorderRules(previous: number, current: number) {
+    //Interchange the order of two rows?
+    console.log(`Moving ROW ${previous} to ${current}`);
+
+    const ruleToMove = this.currentDMN.drgElements[0].decisionTable.rule[previous];
+    //First we delete the moving row
+    this.currentDMN.drgElements[0].decisionTable.rule.splice(previous, 1);
+    //Second we insert the moving row in its correct place
+    this.currentDMN.drgElements[0].decisionTable.rule.splice(current, 0, ruleToMove);
+    
+    this.dataService.setDMN(this.currentDMN);
+  }
 
 }

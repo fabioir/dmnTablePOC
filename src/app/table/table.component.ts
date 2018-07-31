@@ -19,6 +19,7 @@ import { HeaderInputsGroupComponent } from '../header-inputs-group/header-inputs
 import { HeaderInformationItemGroupComponent } from '../header-information-item-group/header-information-item-group.component';
 
 import { CrudService } from '../crud.service';
+import { IfStmt } from '../../../node_modules/@angular/compiler';
 
 @Component({
   selector: 'app-table',
@@ -35,6 +36,7 @@ export class TableComponent implements OnInit, OnDestroy {
   xml;
   url;
   gridSizePolicy = "Autosize";
+  rowMovedFrom;
 
   private frameworkComponents = {
     renderer: RendererComponent,
@@ -430,7 +432,13 @@ export class TableComponent implements OnInit, OnDestroy {
    * @param params Drag Event
    */
   onCellDrag(params) {
-    console.log("You've dragged and droped");
+    if((params.type === 'rowDragEnter')&&(params.overIndex >= 0)){
+    this.rowMovedFrom = params.overIndex;
+    }
+
+    if((params.type === 'rowDragEnd')&&(params.overIndex >= 0)){
+      this.crudService.reorderRules(this.rowMovedFrom,params.overIndex);
+    }
   }
 
 }

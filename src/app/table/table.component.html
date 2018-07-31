@@ -36,6 +36,8 @@
     (cellValueChanged)="onCellEdit($event)"
     (rowDragEnd)="onCellDrag($event)"
     (rowDragEnter)="onCellDrag($event)"
+    (columnMoved)='onColumnMove($event)'
+    (dragStopped)='onColumnMove($event)'
     [frameworkComponents]="frameworkComponents"
     >
 </ag-grid-angular>

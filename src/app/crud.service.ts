@@ -242,8 +242,21 @@ export class CrudService implements OnInit, OnDestroy {
     this.currentDMN.drgElements[0].decisionTable.rule.splice(previous, 1);
     //Second we insert the moving row in its correct place
     this.currentDMN.drgElements[0].decisionTable.rule.splice(current, 0, ruleToMove);
-    
+
     this.dataService.setDMN(this.currentDMN);
+  }
+
+  reorderColumns(previous: number, current: number) {
+    console.log(`Moving column ${previous -1} to index ${current -1}`);
+    if (previous === current) {
+      return;
+    }
+
+    //Determine if it is an input or an output column
+    const inputLength = this.currentDMN.drgElements[0].decisionTable.input.length;
+    if(previous > inputLength){
+      console.log(`Moving an output column ${previous - inputLength -1} to output index ${current - inputLength -1}`);
+    }
   }
 
 }

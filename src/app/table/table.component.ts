@@ -37,6 +37,8 @@ export class TableComponent implements OnInit, OnDestroy {
   url;
   gridSizePolicy = "Autosize";
   rowMovedFrom;
+  columnMovedTo;
+  columnMoving;
 
   private frameworkComponents = {
     renderer: RendererComponent,
@@ -112,18 +114,18 @@ export class TableComponent implements OnInit, OnDestroy {
   addInput() {
 
     this.crudService.createInput();
-/*
-    this.decisionTable.newInput(this.dmnService.newInput());
-
-    if (this.decisionTable.rule) {
-      this.decisionTable.newInputEntry(this.dmnService.newInputEntry());
-    }
-    console.log(this.agGrid.gridOptions.columnDefs);
-    this.updateFromDecisionTable();
-
-    let columnDefs = this.agGrid.columnApi.getAllColumns();
-    console.log(this.decisionTable.rule);
-    //this.agGrid.api.setColumnDefs(columnDefs);*/
+    /*
+        this.decisionTable.newInput(this.dmnService.newInput());
+    
+        if (this.decisionTable.rule) {
+          this.decisionTable.newInputEntry(this.dmnService.newInputEntry());
+        }
+        console.log(this.agGrid.gridOptions.columnDefs);
+        this.updateFromDecisionTable();
+    
+        let columnDefs = this.agGrid.columnApi.getAllColumns();
+        console.log(this.decisionTable.rule);
+        //this.agGrid.api.setColumnDefs(columnDefs);*/
   }
 
   /**
@@ -416,15 +418,11 @@ export class TableComponent implements OnInit, OnDestroy {
     let col = params.column;
     let columns = this.agGrid.columnApi.getAllColumns();
 
-    for (let colIndex = 0; colIndex < columns.length; colIndex++) {
-      if (columns[colIndex] === col) {
-        console.log('Columns match ' + (params.rowIndex + 1) + ' ' + colIndex);
-        
-        //Call the crud service
-        this.crudService.updateRow(params.rowIndex, colIndex, params.newValue);
-        break;
-      }
-    }
+
+    //Call the crud service
+    this.crudService.updateRow(params.rowIndex, columns.indexOf(col), params.newValue);
+
+
   }
 
   /**
@@ -432,12 +430,35 @@ export class TableComponent implements OnInit, OnDestroy {
    * @param params Drag Event
    */
   onCellDrag(params) {
-    if((params.type === 'rowDragEnter')&&(params.overIndex >= 0)){
-    this.rowMovedFrom = params.overIndex;
+    if ((params.type === 'rowDragEnter') && (params.overIndex >= 0)) {
+      this.rowMovedFrom = params.overIndex;
     }
 
-    if((params.type === 'rowDragEnd')&&(params.overIndex >= 0)){
-      this.crudService.reorderRules(this.rowMovedFrom,params.overIndex);
+    if ((params.type === 'rowDragEnd') && (params.overIndex >= 0)) {
+      this.crudService.reorderRules(this.rowMovedFrom, params.overIndex);
+    }
+  }
+
+  onColumnMove(params) {
+    console.log(params);
+    //Set the column that is moving and the place where it is being moved
+    if (params.type === 'columnMoved') {
+      this.columnMovedTo = params.toIndex;
+      this.columnMoving = params.column;
+    }
+
+    if ((params.type === 'dragStopped') && (this.columnMovedTo) && (this.columnMoving)) {
+      console.log("Execute move");
+
+      //Lets find out the origin of the column
+      const columns = this.agGrid.columnApi.getAllColumns();
+      const originalIndex = columns.indexOf(this.columnMoving);
+
+      this.crudService.reorderColumns(originalIndex, this.columnMovedTo);
+      //console.log(columns.indexOf(this.columnMoving));
+      //Now flags are cleared to prevent triggering this function when no columns are dragged
+      this.columnMoving = null;
+      this.columnMovedTo = null;
     }
   }
 

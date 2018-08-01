@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ICellRendererAngularComp } from "ag-grid-angular";
+import { ICellRendererAngularComp } from 'ag-grid-angular';
 
 import { CrudService } from '../crud.service';
 
@@ -9,16 +9,12 @@ import { CrudService } from '../crud.service';
   styleUrls: ['./renderer.component.css']
 })
 export class RendererComponent implements OnInit, ICellRendererAngularComp {
-
   params;
   text;
   class;
-  constructor(
-    private crudService: CrudService
-  ) { }
+  constructor(private crudService: CrudService) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   refresh(): boolean {
     return false;
@@ -26,16 +22,16 @@ export class RendererComponent implements OnInit, ICellRendererAngularComp {
 
   agInit(params: any): void {
     this.params = params;
-    //console.log(params);
+    // console.log(params);
     this.text = params.value;
     this.addClass(params.eGridCell.classList);
   }
 
   edition() {
-    console.log("button edition triggered");
+    console.log('button edition triggered');
     console.log(this.params);
-    console.log("Setting value from the renderer");
-    this.setValue("Edited");
+    console.log('Setting value from the renderer');
+    this.setValue('Edited');
     /*
 //get column number
 const column = this.params.column;
@@ -46,7 +42,6 @@ for(let index = 0; index < allColumns.length; index++){
   if(allColumns[index] === column){
     columnIndex = index;
   }
-  
 }
 
 console.log(allColumns);
@@ -55,13 +50,12 @@ console.log(allColumns);
   }
 
   deleteRow() {
-    //console.log("Delete Row");
-    //console.log(this.params);
+    // console.log("Delete Row");
+    // console.log(this.params);
     this.crudService.deleteRow(this.params.rowIndex);
   }
 
   deleteColumn() {
-    
     const column = this.params.column;
     const allColumns = this.params.column.parent.children;
     let columnIndex;
@@ -70,26 +64,21 @@ console.log(allColumns);
       if (allColumns[index] === column) {
         columnIndex = index;
       }
-
     }
     const inOrOut = column.parent.originalColumnGroup.colGroupDef.headerName;
 
-    if(inOrOut === 'Input'){}
-    
-    switch(inOrOut){
+    switch (inOrOut) {
       case 'Input':
-      this.crudService.deleteInput(columnIndex);
-      break;
+        this.crudService.deleteInput(columnIndex);
+        break;
 
       case 'Output':
-      this.crudService.deleteOutput(columnIndex);
-      break;
+        this.crudService.deleteOutput(columnIndex);
+        break;
 
       default:
-      break;
+        break;
     }
-    
-
   }
 
   setValue(value: string) {
@@ -97,7 +86,7 @@ console.log(allColumns);
   }
 
   enter() {
-    if ((this.params.value !== this.text) && (this.text)) {
+    if (this.params.value !== this.text && this.text) {
       this.setValue(this.text);
     }
   }
@@ -111,9 +100,6 @@ console.log(allColumns);
       if (element === 'output-cell') {
         this.class = element;
       }
-
     });
   }
-
-
 }

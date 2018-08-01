@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import {IHeaderGroupParams} from "ag-grid/main";
-import {IHeaderGroupAngularComp} from "ag-grid-angular/main";
+import {IHeaderGroupParams} from 'ag-grid/main';
+import {IHeaderGroupAngularComp} from 'ag-grid-angular/main';
 
 @Component({
   selector: 'app-header-information-item-group',
@@ -17,7 +17,7 @@ export class HeaderInformationItemGroupComponent implements OnInit, IHeaderGroup
   ngOnInit() {
   }
 
-  agInit(params: IHeaderGroupParams){
+  agInit(params: IHeaderGroupParams) {
     this.params = params;
   }
 

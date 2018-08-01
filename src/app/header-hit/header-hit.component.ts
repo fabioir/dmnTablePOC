@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import {IHeaderParams} from "ag-grid/main";
-import {IHeaderAngularComp} from "ag-grid-angular/main";
+import {IHeaderParams} from 'ag-grid/main';
+import {IHeaderAngularComp} from 'ag-grid-angular/main';
 
 import { HitPolicy, ReverseHitPolicy, Definitions } from '../metamodel-classes/metamodelClasses';
 
@@ -18,16 +18,16 @@ export class HeaderHitComponent implements OnInit, IHeaderAngularComp {
   public params: IHeaderParams;
   public dmn: Definitions;
 
-  constructor(private dataService: DataService,private crudService: CrudService) { }
+  constructor(private dataService: DataService, private crudService: CrudService) { }
 
   ngOnInit() {
   }
 
-  agInit(params: IHeaderParams){
+  agInit(params: IHeaderParams) {
     this.params = params;
   }
 
-  setHitPolicy(policy: string){
+  setHitPolicy(policy: string) {
     /*console.log(policy);
     console.log(ReverseHitPolicy[policy]);
     const reverse = ReverseHitPolicy[policy];

@@ -8,7 +8,6 @@ import { Subscription } from 'rxjs';
 import { DataService } from '../data.service';
 
 import * as _ from '../metamodel-classes/metamodelClasses';
-import { equalParamsAndUrlSegments } from '../../../node_modules/@angular/router/src/router_state';
 
 import { RendererComponent } from '../renderer/renderer.component';
 import { HeaderInputComponent } from '../header-input/header-input.component';
@@ -27,20 +26,19 @@ import { IfStmt } from '../../../node_modules/@angular/compiler';
   styleUrls: ['./table.component.css']
 })
 export class TableComponent implements OnInit, OnDestroy {
-
-  //Variables
+  // Variables
   @ViewChild('agGrid') agGrid: AgGridNg2;
-  decisionTable: _.DecisionTable; //Attached to a Observable from the data service
+  decisionTable: _.DecisionTable; // Attached to a Observable from the data service
   decisionTableSubscription: Subscription;
   xmlSubscription: Subscription;
   xml;
   url;
-  gridSizePolicy = "Autosize";
+  gridSizePolicy = 'Autosize';
   rowMovedFrom;
   columnMovedTo;
   columnMoving;
 
-  private frameworkComponents = {
+  public frameworkComponents = {
     renderer: RendererComponent,
     headerInput: HeaderInputComponent,
     headerOutput: HeaderOutputComponent,
@@ -55,16 +53,16 @@ export class TableComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private dataService: DataService,
     private crudService: CrudService
-  ) { }
+  ) {}
 
   /**
    * Loads the default dmn XML stored in assets. Suscribes to the data service changes in the DMN and the XML
    */
   ngOnInit() {
-    this.dmnService.defaultStart(); //Import default table
-    this.keepTableUpdated(); //Subscribe to table changes
+    this.dmnService.defaultStart(); // Import default table
+    this.keepTableUpdated(); // Subscribe to table changes
     this.keepXMLUpdated();
-    this.crudService.ngOnInit();//Otherwise it doesn't initialize
+    this.crudService.ngOnInit(); // Otherwise it doesn't initialize
   }
 
   /**
@@ -80,8 +78,8 @@ export class TableComponent implements OnInit, OnDestroy {
    * @param params event parameters
    */
   onGridReady(params) {
-    console.log("The grid is ready");
-    //this.updateFromDecisionTable();
+    console.log('The grid is ready');
+    // this.updateFromDecisionTable();
   }
 
   /**
@@ -89,17 +87,15 @@ export class TableComponent implements OnInit, OnDestroy {
    * @param params parameters of the event
    */
   onCellClicked(params) {
-
-    let rowData = this.agGrid.api.getRenderedNodes();
-    //console.log(rowData);
-    let lastRow = rowData[rowData.length - 1];
+    const rowData = this.agGrid.api.getRenderedNodes();
+    // console.log(rowData);
+    const lastRow = rowData[rowData.length - 1];
     if (lastRow.data.number === params.data.number) {
-      //console.log(params);
+      // console.log(params);
       this.addRow();
-      //console.log("Last row clicked");
+      // console.log("Last row clicked");
     }
   }
-
 
   /**
    * Adds a new row to the dmn through the dmn service.
@@ -112,17 +108,16 @@ export class TableComponent implements OnInit, OnDestroy {
    * Adds a new input to the dmn through the dmn service.
    */
   addInput() {
-
     this.crudService.createInput();
     /*
         this.decisionTable.newInput(this.dmnService.newInput());
-    
+
         if (this.decisionTable.rule) {
           this.decisionTable.newInputEntry(this.dmnService.newInputEntry());
         }
         console.log(this.agGrid.gridOptions.columnDefs);
         this.updateFromDecisionTable();
-    
+
         let columnDefs = this.agGrid.columnApi.getAllColumns();
         console.log(this.decisionTable.rule);
         //this.agGrid.api.setColumnDefs(columnDefs);*/
@@ -132,7 +127,6 @@ export class TableComponent implements OnInit, OnDestroy {
    * Adds a new output to the dmn through the dmn service.
    */
   addOutput() {
-
     this.crudService.createOutput();
     /*
     this.decisionTable.newOutput(this.dmnService.newOutput());
@@ -146,21 +140,21 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * 
+   *
    * @param event file uploaded triggers a change event
    * This function reacts to a local XML file upload and asks the dmn service to parse it
    */
   onFileChanged(event) {
-    let reader = new FileReader();
+    const reader = new FileReader();
 
     if (event.target.files && event.target.files.length) {
       const [file] = event.target.files;
       reader.readAsDataURL(file);
 
       reader.onload = () => {
-        //this.formGroup.patchValue({
-        //file: reader.result
-        //});
+        // this.formGroup.patchValue({
+        // file: reader.result
+        // });
         this.dmnService.importXML(reader.result);
         /*this.http.get(reader.result, { responseType: 'text' }).subscribe(data => {
           console.log(data);
@@ -169,21 +163,20 @@ export class TableComponent implements OnInit, OnDestroy {
     }
   }
 
-
-
   /**
    * Subscribes to current Decision Table in the data service and updates the grid every time this is changed
    */
   keepTableUpdated() {
-
     this.decisionTable = this.dataService.table;
     if (this.decisionTable) {
       this.updateFromDecisionTable();
     }
-    this.decisionTableSubscription = this.dataService.getTableUpdates().subscribe(decisionTable => {
-      this.decisionTable = decisionTable;
-      this.updateFromDecisionTable();
-    });
+    this.decisionTableSubscription = this.dataService
+      .getTableUpdates()
+      .subscribe(decisionTable => {
+        this.decisionTable = decisionTable;
+        this.updateFromDecisionTable();
+      });
   }
 
   /**
@@ -194,9 +187,8 @@ export class TableComponent implements OnInit, OnDestroy {
 
     this.xmlSubscription = this.dataService.getXMLUpdates().subscribe(xml => {
       this.xml = xml;
-    })
+    });
   }
-
 
   /**
    * Manually invoques the dmn service that transforms and stores the current DMN to the XML format
@@ -214,19 +206,21 @@ export class TableComponent implements OnInit, OnDestroy {
     this.sizePolicy('');
   }
 
-
   /**
    * Builds a new column definition according to what is in the DecisionTable Object
    */
   updateColumnDefs() {
-    //Update Hit policy
-    let HP = 'F'; //Default hit policy
+    // Update Hit policy
+    let HP = 'F'; // Default hit policy
     if (this.dataService.dmn) {
-      HP = this.dataService.dmn.drgElements[0].decisionTable.hitPolicy.replace(" ", "");
+      HP = this.dataService.dmn.drgElements[0].decisionTable.hitPolicy.replace(
+        ' ',
+        ''
+      );
       HP = _.ReverseHitPolicy[HP];
     }
 
-    //Update Information Item Name
+    // Update Information Item Name
     let ITN = 'Information Item Name';
     if (this.dataService.dmn) {
       if (this.dataService.dmn.drgElements[0].name !== '') {
@@ -234,53 +228,102 @@ export class TableComponent implements OnInit, OnDestroy {
       }
     }
 
-    //Building the first column
-    let firstCol = {
-      headerName: '', field: '', id: 'overHit', suppressMovable: true, width: 120, suppressResize: true, pinned: 'left',
+    // Building the first column
+    const firstCol = {
+      headerName: '',
+      field: '',
+      id: 'overHit',
+      suppressMovable: true,
+      width: 120,
+      suppressResize: true,
+      pinned: 'left',
       children: [
-        { headerName: HP, field: 'number', width: 120, rowDrag: true, suppressResize: true, colId: 'hitPolicy', lockPosition: true, headerComponentFramework: <{ new(): HeaderHitComponent }>HeaderHitComponent }
+        {
+          headerName: HP,
+          field: 'number',
+          width: 120,
+          rowDrag: true,
+          suppressResize: true,
+          colId: 'hitPolicy',
+          lockPosition: true,
+          headerComponentFramework: <{ new (): HeaderHitComponent }>(
+            HeaderHitComponent
+          )
+        }
       ]
     };
 
-    //Building Input Columns
-    let inputColumns = this.buildInputColumns();
+    // Building Input Columns
+    const inputColumns = this.buildInputColumns();
 
-    //Building Output Columns
-    let outputColumns = this.buildOutputColumns();
+    // Building Output Columns
+    const outputColumns = this.buildOutputColumns();
 
-    //Assembling all the columns together
-    let columnDefs = [
+    // Assembling all the columns together
+    const columnDefs = [
       {
-        headerName: ITN, field: 'infItemName', pinned: 'left', colId: 'decisionName', headerGroupComponentFramework: HeaderInformationItemGroupComponent,
+        headerName: ITN,
+        field: 'infItemName',
+        pinned: 'left',
+        colId: 'decisionName',
+        headerGroupComponentFramework: HeaderInformationItemGroupComponent,
         children: [firstCol, inputColumns, outputColumns]
-      }];
+      }
+    ];
 
-    //Setting columns to the grid (When in edition step we'll have to check synchro among displayed and stored table)
+    // Setting columns to the grid (When in edition step we'll have to check synchro among displayed and stored table)
     this.agGrid.api.setColumnDefs(columnDefs);
-    //console.log(this.agGrid.columnApi.getAllColumns());
+    // console.log(this.agGrid.columnApi.getAllColumns());
   }
 
   /**
    * Builds the input columns from the decision table updated respect to the one stored in the data service
    */
   buildInputColumns(): any {
-    let columns = [];
+    const columns = [];
     let count = 1;
     if (this.decisionTable) {
       this.decisionTable.input.forEach(input => {
-        columns.push({ headerName: `${input.inputExpression.text} (${input.inputExpression.typeRef})`, field: `iv${count}`, editable: true, colId: `input${count}`, cellClass: 'input-cell', headerComponentFramework: <{ new(): HeaderInputComponent }>HeaderInputComponent });
-        //Make sure you know what to put here. Might need to change the Metamodel
-        //Let's take care of specification conformance
+        columns.push({
+          headerName: `${input.inputExpression.text} (${
+            input.inputExpression.typeRef
+          })`,
+          field: `iv${count}`,
+          editable: true,
+          colId: `input${count}`,
+          cellClass: 'input-cell',
+          headerComponentFramework: <{ new (): HeaderInputComponent }>(
+            HeaderInputComponent
+          )
+        });
+        // Make sure you know what to put here. Might need to change the Metamodel
+        // Let's take care of specification conformance
         count++;
       });
       if (this.decisionTable.input.length === 0) {
-        columns.push({ headerName: 'Input Expression 1', field: `iv${count}`, editable: true, colId: 'input1' });
+        columns.push({
+          headerName: 'Input Expression 1',
+          field: `iv${count}`,
+          editable: true,
+          colId: 'input1'
+        });
       }
     } else {
-      columns.push({ headerName: 'Input Expression 1', field: `iv${count}`, editable: true, colId: 'input1' });
+      columns.push({
+        headerName: 'Input Expression 1',
+        field: `iv${count}`,
+        editable: true,
+        colId: 'input1'
+      });
     }
     return {
-      headerName: 'Input', field: '', colId: 'inputs', suppressMovable: true, lockPosition: true, marryChildren: true, headerGroupComponentFramework: HeaderInputsGroupComponent,
+      headerName: 'Input',
+      field: '',
+      colId: 'inputs',
+      suppressMovable: true,
+      lockPosition: true,
+      marryChildren: true,
+      headerGroupComponentFramework: HeaderInputsGroupComponent,
       children: columns
     };
   }
@@ -289,23 +332,48 @@ export class TableComponent implements OnInit, OnDestroy {
    * Builds the output columns from the decision table updated respect to the one stored in the data service
    */
   buildOutputColumns(): any {
-    let columns = [];
+    const columns = [];
     let count = 1;
 
     if (this.decisionTable) {
       this.decisionTable.output.forEach(output => {
-        //console.log(output)
-        columns.push({ headerName: `${output.typeRef}`, field: `ov${count}`, editable: true, colId: `output${count}`, cellClass: 'output-cell', headerComponentFramework: <{ new(): HeaderOutputComponent }>HeaderOutputComponent });
+        // console.log(output)
+        columns.push({
+          headerName: `${output.typeRef}`,
+          field: `ov${count}`,
+          editable: true,
+          colId: `output${count}`,
+          cellClass: 'output-cell',
+          headerComponentFramework: <{ new (): HeaderOutputComponent }>(
+            HeaderOutputComponent
+          )
+        });
         count++;
       });
       if (this.decisionTable.output.length === 0) {
-        columns.push({ headerName: 'Output Expression 1', field: `ov${count}`, editable: true, colId: 'output1' });
+        columns.push({
+          headerName: 'Output Expression 1',
+          field: `ov${count}`,
+          editable: true,
+          colId: 'output1'
+        });
       }
     } else {
-      columns.push({ headerName: 'Output Expression 1', field: `ov${count}`, editable: true, colId: 'output1' });
+      columns.push({
+        headerName: 'Output Expression 1',
+        field: `ov${count}`,
+        editable: true,
+        colId: 'output1'
+      });
     }
     return {
-      headerName: 'Output', field: '', colId: 'outputs', suppressMovable: true, lockPosition: true, marryChildren: true, headerGroupComponentFramework: HeaderOutputsGroupComponent,
+      headerName: 'Output',
+      field: '',
+      colId: 'outputs',
+      suppressMovable: true,
+      lockPosition: true,
+      marryChildren: true,
+      headerGroupComponentFramework: HeaderOutputsGroupComponent,
       children: columns
     };
   }
@@ -314,30 +382,29 @@ export class TableComponent implements OnInit, OnDestroy {
    * Gets the data stored in the decision table (updated respect to the one stored in the data service) and fills the rows
    */
   updateCells() {
-    let rowData = [];
+    const rowData = [];
     let count = 0;
 
     if (this.decisionTable.rule) {
       this.decisionTable.rule.forEach(rule => {
-
-        let newRow = {};
+        const newRow = {};
         newRow['number'] = count + 1;
         newRow['id'] = count + 1;
         count++;
 
-        //Filling each input column
+        // Filling each input column
         let inputNumber = 1;
 
         rule.inputEntry.forEach(inputEnt => {
-          newRow[`iv${inputNumber}`] = inputEnt.text.replace(/["']/g, "");
+          newRow[`iv${inputNumber}`] = inputEnt.text.replace(/["']/g, '');
           inputNumber++;
         });
 
-        //Filling each output column
+        // Filling each output column
         let outputNumber = 1;
 
         rule.outputEntry.forEach(outputEnt => {
-          newRow[`ov${outputNumber}`] = outputEnt.text.replace(/["']/g, "");
+          newRow[`ov${outputNumber}`] = outputEnt.text.replace(/["']/g, '');
           outputNumber++;
         });
 
@@ -345,9 +412,9 @@ export class TableComponent implements OnInit, OnDestroy {
       });
     }
 
-    //Setting rows to the grid (When in edition step we'll have to check synchro among displayed and stored table)
+    // Setting rows to the grid (When in edition step we'll have to check synchro among displayed and stored table)
     this.agGrid.api.setRowData(rowData);
-    //console.log(this.agGrid.api.getRenderedNodes())
+    // console.log(this.agGrid.api.getRenderedNodes())
   }
 
   /**
@@ -361,11 +428,11 @@ export class TableComponent implements OnInit, OnDestroy {
    * Generates and downloads a .dmn text file
    */
   downloadDMN() {
-    //First we save the dmn to XML to ensure it is updated
+    // First we save the dmn to XML to ensure it is updated
     this.saveToXML();
-    var pom = document.createElement('a');
-    var filename = "file.dmn";
-    let blob = new Blob([this.xml], { type: 'text/plain' });
+    const pom = document.createElement('a');
+    const filename = 'file.dmn';
+    const blob = new Blob([this.xml], { type: 'text/plain' });
 
     pom.setAttribute('href', window.URL.createObjectURL(blob));
     pom.setAttribute('download', filename);
@@ -391,17 +458,17 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * When called with a parameter sets the global policy of display of the columns. 
+   * When called with a parameter sets the global policy of display of the columns.
    * Called without parameters executes the set policy and calls the appropiate function that resizes the grid.
    * @param params 'Autosize' or 'Size to fit' (default)
    */
   sizePolicy(params) {
     if (params) {
-      //console.log(params);
+      // console.log(params);
       this.gridSizePolicy = params.value;
       this.sizePolicy('');
     } else {
-      if (this.gridSizePolicy === "Autosize") {
+      if (this.gridSizePolicy === 'Autosize') {
         this.autoSize();
       } else {
         this.sizeToFit();
@@ -414,15 +481,16 @@ export class TableComponent implements OnInit, OnDestroy {
    * @param params The edition event triggered by the grid
    */
   onCellEdit(params) {
-    //Find out the index of the column
-    let col = params.column;
-    let columns = this.agGrid.columnApi.getAllColumns();
+    // Find out the index of the column
+    const col = params.column;
+    const columns = this.agGrid.columnApi.getAllColumns();
 
-
-    //Call the crud service
-    this.crudService.updateRow(params.rowIndex, columns.indexOf(col), params.newValue);
-
-
+    // Call the crud service
+    this.crudService.updateRow(
+      params.rowIndex,
+      columns.indexOf(col),
+      params.newValue
+    );
   }
 
   /**
@@ -430,36 +498,39 @@ export class TableComponent implements OnInit, OnDestroy {
    * @param params Drag Event
    */
   onCellDrag(params) {
-    if ((params.type === 'rowDragEnter') && (params.overIndex >= 0)) {
+    if (params.type === 'rowDragEnter' && params.overIndex >= 0) {
       this.rowMovedFrom = params.overIndex;
     }
 
-    if ((params.type === 'rowDragEnd') && (params.overIndex >= 0)) {
+    if (params.type === 'rowDragEnd' && params.overIndex >= 0) {
       this.crudService.reorderRules(this.rowMovedFrom, params.overIndex);
     }
   }
 
   onColumnMove(params) {
     console.log(params);
-    //Set the column that is moving and the place where it is being moved
+    // Set the column that is moving and the place where it is being moved
     if (params.type === 'columnMoved') {
       this.columnMovedTo = params.toIndex;
       this.columnMoving = params.column;
     }
 
-    if ((params.type === 'dragStopped') && (this.columnMovedTo) && (this.columnMoving)) {
-      console.log("Execute move");
+    if (
+      params.type === 'dragStopped' &&
+      this.columnMovedTo &&
+      this.columnMoving
+    ) {
+      console.log('Execute move');
 
-      //Lets find out the origin of the column
+      // Lets find out the origin of the column
       const columns = this.agGrid.columnApi.getAllColumns();
       const originalIndex = columns.indexOf(this.columnMoving);
 
       this.crudService.reorderColumns(originalIndex, this.columnMovedTo);
-      //console.log(columns.indexOf(this.columnMoving));
-      //Now flags are cleared to prevent triggering this function when no columns are dragged
+      // console.log(columns.indexOf(this.columnMoving));
+      // Now flags are cleared to prevent triggering this function when no columns are dragged
       this.columnMoving = null;
       this.columnMovedTo = null;
     }
   }
-
 }

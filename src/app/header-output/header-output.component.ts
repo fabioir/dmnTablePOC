@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import {IHeaderParams} from "ag-grid/main";
-import {IHeaderAngularComp} from "ag-grid-angular/main";
+import {IHeaderParams} from 'ag-grid/main';
+import {IHeaderAngularComp} from 'ag-grid-angular/main';
 
 @Component({
   selector: 'app-header-output',
@@ -17,13 +17,13 @@ export class HeaderOutputComponent implements OnInit, IHeaderAngularComp {
   ngOnInit() {
   }
 
-  agInit(params: IHeaderParams){
+  agInit(params: IHeaderParams) {
     this.params = params;
-    //console.log(params);
+    // console.log(params);
   }
 
-  editOutput(){
-    console.log("This should deploy output edit options");
+  editOutput() {
+    console.log('This should deploy output edit options');
   }
 
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import {IHeaderGroupParams} from "ag-grid/main";
-import {IHeaderGroupAngularComp} from "ag-grid-angular/main";
+import {IHeaderGroupParams} from 'ag-grid/main';
+import {IHeaderGroupAngularComp} from 'ag-grid-angular/main';
 
 import { CrudService } from '../crud.service';
 
@@ -21,12 +21,12 @@ export class HeaderOutputsGroupComponent implements OnInit, IHeaderGroupAngularC
   ngOnInit() {
   }
 
-  agInit(params: IHeaderGroupParams){
+  agInit(params: IHeaderGroupParams) {
     this.params = params;
-    //console.log(params);
-  } 
- 
-  newOutput(){
+    // console.log(params);
+  }
+
+  newOutput() {
     this.crudService.createOutput();
   }
 

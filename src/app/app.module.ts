@@ -11,8 +11,16 @@ import { AgGridModule } from 'ag-grid-angular';
 import { ViewXmlComponent } from './view-xml/view-xml.component';
 import { RendererComponent } from './renderer/renderer.component';
 
-import { MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule, MatButtonToggleModule, MatMenuModule, MatStepperModule } from '@angular/material';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
+import {
+  MatButtonModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatIconModule,
+  MatButtonToggleModule,
+  MatMenuModule,
+  MatStepperModule
+} from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { FormsModule } from '@angular/forms';
 import { HeaderInputComponent } from './header-input/header-input.component';
@@ -49,7 +57,15 @@ import { HeaderInformationItemGroupComponent } from './header-information-item-g
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    AgGridModule.withComponents([ RendererComponent, HeaderInputComponent, HeaderOutputComponent, HeaderOutputsGroupComponent, HeaderInputsGroupComponent, HeaderHitComponent, HeaderInformationItemGroupComponent ]), //The withComponents call is necessary for the grid to be able to use Angular components as cells / headers
+    AgGridModule.withComponents([
+      RendererComponent,
+      HeaderInputComponent,
+      HeaderOutputComponent,
+      HeaderOutputsGroupComponent,
+      HeaderInputsGroupComponent,
+      HeaderHitComponent,
+      HeaderInformationItemGroupComponent
+    ]), // The withComponents call is necessary for the grid to be able to use Angular components as cells / headers
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
@@ -63,4 +79,4 @@ import { HeaderInformationItemGroupComponent } from './header-information-item-g
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

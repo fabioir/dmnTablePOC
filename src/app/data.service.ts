@@ -23,10 +23,10 @@ export class DataService {
    */
   setXML(xml: string) {
     if (xml) {
-      this.xml = xml
+      this.xml = xml;
       this.xmlUpdate.next(this.xml);
     } else {
-      console.log("XML problem");
+      console.log('XML problem');
     }
   }
 
@@ -35,12 +35,12 @@ export class DataService {
    * @param dmn object created with the Moddle
    */
   setDMN(dmn: Definitions) {
-    console.log("setting dmn in data service");
+    console.log('setting dmn in data service');
     if (dmn) {
       this.dmn = dmn;
       this.dmnUpdate.next(this.dmn);
     } else {
-      console.log("DMN problem");
+      console.log('DMN problem');
     }
   }
 
@@ -53,7 +53,7 @@ export class DataService {
       this.table = table;
       this.tableUpdate.next(this.table);
     } else {
-      console.log("Decision Table problem");
+      console.log('Decision Table problem');
     }
   }
 

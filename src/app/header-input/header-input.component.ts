@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import {IHeaderParams} from "ag-grid/main";
-import {IHeaderAngularComp} from "ag-grid-angular/main";
+import {IHeaderParams} from 'ag-grid/main';
+import {IHeaderAngularComp} from 'ag-grid-angular/main';
 
 @Component({
   selector: 'app-header-input',
@@ -16,14 +16,14 @@ export class HeaderInputComponent implements OnInit, IHeaderAngularComp {
 
   ngOnInit() {
   }
-  
-  agInit(params: IHeaderParams){
+
+  agInit(params: IHeaderParams) {
     this.params = params;
-    //console.log(params);
+    // console.log(params);
   }
 
-  editInput(){
-    console.log("This should deploy input edit options");
+  editInput() {
+    console.log('This should deploy input edit options');
   }
 
 }

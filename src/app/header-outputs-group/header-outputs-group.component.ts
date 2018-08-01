@@ -26,6 +26,9 @@ export class HeaderOutputsGroupComponent implements OnInit, IHeaderGroupAngularC
     // console.log(params);
   }
 
+  /**
+   * Asks the crud service to create a new output
+   */
   newOutput() {
     this.crudService.createOutput();
   }

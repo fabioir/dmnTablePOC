@@ -284,6 +284,10 @@ export class DmnService implements OnInit, OnDestroy {
     return newRule;
   }
 
+  /**
+   * Generates DMN created Input Entries for a given rule
+   * @param ruleId rule id
+   */
   generateRuleInputEntries(ruleId: string): Array<_.UnaryTests> {
     const result = new Array<_.UnaryTests>();
 
@@ -302,6 +306,10 @@ export class DmnService implements OnInit, OnDestroy {
     return result;
   }
 
+  /**
+   * Generates DMN created Output Entries for a given rule
+   * @param ruleId rule id
+   */
   generateRuleOutputEntries(ruleId: string): Array<_.LiteralExpression> {
     const result = new Array<_.LiteralExpression>();
 

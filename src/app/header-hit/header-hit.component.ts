@@ -27,6 +27,10 @@ export class HeaderHitComponent implements OnInit, IHeaderAngularComp {
     this.params = params;
   }
 
+  /**
+   * Asks the crud service to set a new Hit Policy for the table
+   * @param policy new policy
+   */
   setHitPolicy(policy: string) {
     /*console.log(policy);
     console.log(ReverseHitPolicy[policy]);

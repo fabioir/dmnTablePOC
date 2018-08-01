@@ -26,6 +26,9 @@ export class HeaderInputsGroupComponent implements OnInit, IHeaderGroupAngularCo
     // console.log(params);
   }
 
+  /**
+   * Asks the crud service to create a new input
+   */
   newInput() {
     this.crudService.createInput();
   }

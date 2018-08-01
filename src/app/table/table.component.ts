@@ -19,6 +19,8 @@ import { HeaderInformationItemGroupComponent } from '../header-information-item-
 
 import { CrudService } from '../crud.service';
 
+import beautify from 'xml-beautifier';
+
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
@@ -434,7 +436,7 @@ export class TableComponent implements OnInit, OnDestroy {
   downloadDMN() {
     // First we save the dmn to XML to ensure it is updated
     this.saveToXML();
-    // this.xml = `${this.xml}|prettyXML`;
+    this.xml = beautify(this.xml);
     const pom = document.createElement('a');
     const filename = 'file.dmn';
     const blob = new Blob([this.xml], { type: 'text/plain' });

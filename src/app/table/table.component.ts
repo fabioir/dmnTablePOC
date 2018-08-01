@@ -18,7 +18,6 @@ import { HeaderInputsGroupComponent } from '../header-inputs-group/header-inputs
 import { HeaderInformationItemGroupComponent } from '../header-information-item-group/header-information-item-group.component';
 
 import { CrudService } from '../crud.service';
-import { IfStmt } from '../../../node_modules/@angular/compiler';
 
 @Component({
   selector: 'app-table',
@@ -26,17 +25,21 @@ import { IfStmt } from '../../../node_modules/@angular/compiler';
   styleUrls: ['./table.component.css']
 })
 export class TableComponent implements OnInit, OnDestroy {
+
+
+
   // Variables
   @ViewChild('agGrid') agGrid: AgGridNg2;
   decisionTable: _.DecisionTable; // Attached to a Observable from the data service
   decisionTableSubscription: Subscription;
   xmlSubscription: Subscription;
-  xml;
+  xml = '';
   url;
   gridSizePolicy = 'Autosize';
   rowMovedFrom;
   columnMovedTo;
   columnMoving;
+
 
   public frameworkComponents = {
     renderer: RendererComponent,
@@ -59,6 +62,7 @@ export class TableComponent implements OnInit, OnDestroy {
    * Loads the default dmn XML stored in assets. Suscribes to the data service changes in the DMN and the XML
    */
   ngOnInit() {
+    console.log();
     this.dmnService.defaultStart(); // Import default table
     this.keepTableUpdated(); // Subscribe to table changes
     this.keepXMLUpdated();
@@ -430,6 +434,7 @@ export class TableComponent implements OnInit, OnDestroy {
   downloadDMN() {
     // First we save the dmn to XML to ensure it is updated
     this.saveToXML();
+    // this.xml = `${this.xml}|prettyXML`;
     const pom = document.createElement('a');
     const filename = 'file.dmn';
     const blob = new Blob([this.xml], { type: 'text/plain' });

@@ -495,7 +495,7 @@ export class TableComponent implements OnInit, OnDestroy {
 
   /**
    * Reacts to a Drag and Drop action and performs the necessary changes to the DMN
-   * @param params Drag Event
+   * @param params Drag Event (rowDragEnter or rowDragEnd)
    */
   onCellDrag(params) {
     if (params.type === 'rowDragEnter' && params.overIndex >= 0) {
@@ -507,6 +507,10 @@ export class TableComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Reacts to column moved and drag stopped events in order to reflect this changes in the DMN when the drag has been accomplished
+   * @param params Column Moved or Drag Stopped event
+   */
   onColumnMove(params) {
     console.log(params);
     // Set the column that is moving and the place where it is being moved

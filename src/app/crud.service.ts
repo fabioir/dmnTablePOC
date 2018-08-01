@@ -34,6 +34,9 @@ export class CrudService implements OnInit, OnDestroy {
     this.dmnSubscription.unsubscribe();
   }
 
+  /**
+   * Creates a new Rule in the DMN and consequently a new row in the table
+   */
   createRow() {
 
     // create a dmn:DecisionRule
@@ -57,6 +60,12 @@ export class CrudService implements OnInit, OnDestroy {
     this.dataService.setDMN(this.currentDMN);
   }
 
+  /**
+   * Changes the value of a rule's text in the DMN
+   * @param rowIndex row index
+   * @param columnIndex column index
+   * @param newValue New text value
+   */
   updateRow(rowIndex: number, columnIndex: number, newValue: string) {
     console.log('CRUD Update Row');
     const rule = this.dataService.dmn.drgElements[0].decisionTable.rule[rowIndex];
@@ -92,6 +101,10 @@ export class CrudService implements OnInit, OnDestroy {
     this.dataService.setDMN(this.currentDMN);
   }
 
+  /**
+   * Deletes the referenced rule from the DMN
+   * @param rowIndex row index
+   */
   deleteRow(rowIndex: number) {
     const newRules = new Array<_.DecisionRule>();
     const rules = this.currentDMN.drgElements[0].decisionTable.rule;
@@ -107,6 +120,9 @@ export class CrudService implements OnInit, OnDestroy {
     this.dataService.setDMN(this.currentDMN);
   }
 
+  /**
+   * Creates a new Intput in the DMN and consequently a new intput column
+   */
   createInput() {
     // Needed to add to the table inputs
     const inputClause: _.InputClause = this.dmnService.newInput();
@@ -133,8 +149,15 @@ export class CrudService implements OnInit, OnDestroy {
 
   }
 
+  /**
+   * Changes an input column parameters
+   */
   updateInput() { }
 
+  /**
+   * Deletes the referenced input from the DMN and every related input entry from the rules
+   * @param colNumber number of the column
+   */
   deleteInput(colNumber: number) {
     console.log('deleting input column ' + colNumber);
 
@@ -166,6 +189,9 @@ export class CrudService implements OnInit, OnDestroy {
     // reasign ids... May not be relevant ?
   }
 
+  /**
+   * Creates a new Output in the DMN and consequently a new output column
+   */
   createOutput() {
     // Needed to add to the table outputs
     const outputClause: _.OutputClause = this.dmnService.newOutput();
@@ -190,8 +216,15 @@ export class CrudService implements OnInit, OnDestroy {
     this.dataService.setDMN(this.currentDMN);
   }
 
+  /**
+   * Changes an output column parameters
+   */
   updateOutput() { }
 
+   /**
+   * Deletes the referenced ouput from the DMN and every related ouput entry from the rules
+   * @param colNumber number of the column
+   */
   deleteOutput(colNumber: number) {
     console.log('deleting output column ' + colNumber);
 
@@ -237,6 +270,12 @@ export class CrudService implements OnInit, OnDestroy {
   With the reconceptualization of not reflecting the changes from the table in a DMN,
    reordering is going to be irrelevant. The table can handle it by itsels, so theese functions have been Ok but not necessary anymore
   */
+
+  /**
+   * Reorders the rules in the dmn after a drag and drop action
+   * @param previous rule to reallocate
+   * @param current place to insert
+   */
   reorderRules(previous: number, current: number) {
     // Interchange the order of two rows?
     console.log(`Moving ROW ${previous} to ${current}`);
@@ -250,6 +289,11 @@ export class CrudService implements OnInit, OnDestroy {
     this.dataService.setDMN(this.currentDMN);
   }
 
+  /**
+   * Reorders the columns after a drag and drop action
+   * @param previous Number indicating the column to move
+   * @param current Number indicating to what place the move is headed
+   */
   reorderColumns(previous: number, current: number) {
     console.log(`Moving column ${previous - 1} to index ${current - 1}`);
     if (previous === current) {

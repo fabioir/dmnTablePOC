@@ -121,13 +121,16 @@ export class TableComponent implements OnInit, OnDestroy {
     } );
 
     this.dialogRef.afterClosed().subscribe(result => {
-      console.log(params);
+      console.log(result.newDescription);
       this.agGrid.api.startEditingCell({
         rowIndex: params.rowIndex,
         colKey: params.colDef.colId,
-        charPress: result
+        charPress: result.newValue
       });
       this.agGrid.api.stopEditing();
+      const data = params.data;
+      data[`${params.colDef.field}description`] = result.newDescription;
+      console.log(this.agGrid.api.getRowNode(params.rowIndex).setData(data));
     });
   }
 
@@ -425,6 +428,7 @@ export class TableComponent implements OnInit, OnDestroy {
         newRow['number'] = count + 1;
         newRow['id'] = count + 1;
         newRow['randParam'] = Math.random();
+        newRow['ruleDescription'] = 'Rule default description';
         count++;
 
         // Filling each input column
@@ -432,6 +436,8 @@ export class TableComponent implements OnInit, OnDestroy {
 
         rule.inputEntry.forEach(inputEnt => {
           newRow[`iv${inputNumber}`] = inputEnt.text.replace(/["']/g, '');
+          // Description
+          newRow[`iv${inputNumber}description`] = 'cell default description';
           inputNumber++;
         });
 
@@ -440,6 +446,8 @@ export class TableComponent implements OnInit, OnDestroy {
 
         rule.outputEntry.forEach(outputEnt => {
           newRow[`ov${outputNumber}`] = outputEnt.text.replace(/["']/g, '');
+           // Description
+           newRow[`ov${outputNumber}description`] = 'cell default description';
           outputNumber++;
         });
 

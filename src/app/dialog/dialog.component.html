@@ -1,7 +1,11 @@
 <h1 mat-dialog-title>Edit cell</h1>
 
 <mat-dialog-content>
-  <input [(ngModel)]="newValue" type="text">
+  <input placeholder="cell value" (keydown.enter)="close()" [(ngModel)]="newValue" type="text">
+  <input placeholder="description" (keydown.enter)="close()" [(ngModel)]="newDescription" type="text">
+<div *ngIf="description">
+  <p>Current description: </p>{{description}}
+</div>
 </mat-dialog-content>
 
 <mat-dialog-actions>

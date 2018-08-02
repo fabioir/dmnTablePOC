@@ -9,6 +9,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 export class DialogComponent implements OnInit {
 
   newValue: string;
+  newDescription: string;
+  description: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any,
@@ -16,7 +18,8 @@ export class DialogComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // console.log(this.data.valueOf());
+    this.description = this.data.data[`${this.data.colDef.field}description`];
+    console.log(this.data);
     const offsetX = this.data.event.pageX;
     const offsetY = this.data.event.pageY;
     console.log(`${offsetX} ${offsetY}`);
@@ -25,6 +28,6 @@ export class DialogComponent implements OnInit {
   }
 
   close() {
-    this.dialogRef.close(this.newValue);
+    this.dialogRef.close({newValue: this.newValue, newDescription: this.newDescription});
   }
 }

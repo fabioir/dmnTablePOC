@@ -115,12 +115,19 @@ export class TableComponent implements OnInit, OnDestroy {
    * @param params cell clicked event
    */
   createMenu(params) {
-    console.log('Cell clicked');
-    this.dialogRef = this.dialog.open( DialogComponent );
+    this.dialogRef = this.dialog.open( DialogComponent, {
+      data: params,
+      hasBackdrop: false
+    } );
 
     this.dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log(result);
+      console.log(params);
+      this.agGrid.api.startEditingCell({
+        rowIndex: params.rowIndex,
+        colKey: params.colDef.colId,
+        charPress: result
+      });
+      this.agGrid.api.stopEditing();
     });
   }
 
@@ -417,6 +424,7 @@ export class TableComponent implements OnInit, OnDestroy {
         const newRow = {};
         newRow['number'] = count + 1;
         newRow['id'] = count + 1;
+        newRow['randParam'] = Math.random();
         count++;
 
         // Filling each input column

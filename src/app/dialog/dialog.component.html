@@ -1,3 +1,9 @@
-<p>
-  dialog works!
-</p>
+<h1 mat-dialog-title>Edit cell</h1>
+
+<mat-dialog-content>
+  <input [(ngModel)]="newValue" type="text">
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button (click)="close()" mat-button>Done</button>
+</mat-dialog-actions>

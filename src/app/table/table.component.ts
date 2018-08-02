@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, Inject } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
 import { AgGridNg2 } from 'ag-grid-angular';
@@ -21,6 +21,10 @@ import { CrudService } from '../crud.service';
 
 import beautify from 'xml-beautifier';
 
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+
+import { DialogComponent } from '../dialog/dialog.component';
+
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
@@ -41,6 +45,7 @@ export class TableComponent implements OnInit, OnDestroy {
   rowMovedFrom;
   columnMovedTo;
   columnMoving;
+  dialogRef: MatDialogRef<DialogComponent>;
 
 
   public frameworkComponents = {
@@ -57,7 +62,8 @@ export class TableComponent implements OnInit, OnDestroy {
     private dmnService: DmnService,
     private http: HttpClient,
     private dataService: DataService,
-    private crudService: CrudService
+    private crudService: CrudService,
+    public dialog: MatDialog
   ) {}
 
   /**
@@ -93,6 +99,7 @@ export class TableComponent implements OnInit, OnDestroy {
    * @param params parameters of the event
    */
   onCellClicked(params) {
+    this.createMenu(params);
     const rowData = this.agGrid.api.getRenderedNodes();
     // console.log(rowData);
     const lastRow = rowData[rowData.length - 1];
@@ -101,6 +108,20 @@ export class TableComponent implements OnInit, OnDestroy {
       this.addRow();
       // console.log("Last row clicked");
     }
+  }
+
+  /**
+   * Creates a menu to edit the cell
+   * @param params cell clicked event
+   */
+  createMenu(params) {
+    console.log('Cell clicked');
+    this.dialogRef = this.dialog.open( DialogComponent );
+
+    this.dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      console.log(result);
+    });
   }
 
   /**
@@ -437,6 +458,9 @@ export class TableComponent implements OnInit, OnDestroy {
     // First we save the dmn to XML to ensure it is updated
     this.saveToXML();
     this.xml = beautify(this.xml);
+    // const XMLS = new XMLSerializer();
+    // const parser = new DOMParser();
+    // this.xml = XMLS.serializeToString(parser.parseFromString(this.xml, 'text/xml'));
     const pom = document.createElement('a');
     const filename = 'file.dmn';
     const blob = new Blob([this.xml], { type: 'text/plain' });
@@ -545,3 +569,4 @@ export class TableComponent implements OnInit, OnDestroy {
     }
   }
 }
+

@@ -18,7 +18,8 @@ import {
   MatIconModule,
   MatButtonToggleModule,
   MatMenuModule,
-  MatStepperModule
+  MatStepperModule,
+  MatDialogModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -29,6 +30,7 @@ import { HeaderOutputsGroupComponent } from './header-outputs-group/header-outpu
 import { HeaderInputsGroupComponent } from './header-inputs-group/header-inputs-group.component';
 import { HeaderHitComponent } from './header-hit/header-hit.component';
 import { HeaderInformationItemGroupComponent } from './header-information-item-group/header-information-item-group.component';
+import { DialogComponent } from './dialog/dialog.component';
 
 @NgModule({
   exports: [
@@ -39,7 +41,8 @@ import { HeaderInformationItemGroupComponent } from './header-information-item-g
     MatIconModule,
     MatButtonToggleModule,
     MatMenuModule,
-    MatStepperModule
+    MatStepperModule,
+    MatDialogModule
   ],
   declarations: [
     AppComponent,
@@ -51,7 +54,8 @@ import { HeaderInformationItemGroupComponent } from './header-information-item-g
     HeaderOutputsGroupComponent,
     HeaderInputsGroupComponent,
     HeaderHitComponent,
-    HeaderInformationItemGroupComponent
+    HeaderInformationItemGroupComponent,
+    DialogComponent
   ],
   imports: [
     BrowserModule,
@@ -74,9 +78,11 @@ import { HeaderInformationItemGroupComponent } from './header-information-item-g
     FormsModule,
     MatButtonToggleModule,
     MatMenuModule,
-    MatStepperModule
+    MatStepperModule,
+    MatDialogModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ DialogComponent ]
 })
 export class AppModule {}

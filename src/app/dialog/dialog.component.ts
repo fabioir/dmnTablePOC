@@ -28,6 +28,12 @@ export class DialogComponent implements OnInit {
   }
 
   close() {
+    if (!this.newValue) {
+      this.newValue = this.data.value;
+    }
+    if (!this.newDescription) {
+      this.newDescription = this.description;
+    }
     this.dialogRef.close({newValue: this.newValue, newDescription: this.newDescription});
   }
 }

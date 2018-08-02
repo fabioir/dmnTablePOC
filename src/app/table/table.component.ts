@@ -115,12 +115,18 @@ export class TableComponent implements OnInit, OnDestroy {
    * @param params cell clicked event
    */
   createMenu(params) {
+    if (this.dialog.openDialogs) {
+      this.dialog.closeAll();
+    }
     this.dialogRef = this.dialog.open( DialogComponent, {
       data: params,
       hasBackdrop: false
     } );
 
     this.dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
       console.log(result.newDescription);
       this.agGrid.api.startEditingCell({
         rowIndex: params.rowIndex,
